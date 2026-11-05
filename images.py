@@ -1,16 +1,4 @@
-"""Chèn ảnh minh hoạ vào các trang của bot.
-
-Ảnh được gắn lên ĐẦU tin nhắn dưới dạng link preview của Telegram, nên
-dùng được với nút bấm (không phải gửi lại tin mới). Trang nào chưa có ảnh
-thì hiện chữ như bình thường.
-
-Có 2 nguồn ảnh (ưu tiên từ trên xuống):
-  1. Link ảnh trực tiếp ghi trong file image_links.txt  (dễ nhất)
-       dạng mỗi dòng:  tên_ảnh = https://.../anh.png
-  2. File ảnh trong thư mục images/ (tên file = tên_ảnh, vd android_v2rayng_1.png)
-       - GitHub Actions (repo PUBLIC): tự dùng raw.githubusercontent.com
-       - Chạy nơi khác: đặt biến IMAGE_BASE_URL, vd https://domain.com/images/
-"""
+"""Chèn ảnh minh hoạ vào các trang của bot."""
 
 import os
 from functools import lru_cache
@@ -20,7 +8,11 @@ from telegram import LinkPreviewOptions
 from config import BASE_DIR
 
 IMAGES_DIR = os.path.join(BASE_DIR, "images")
-LINKS_FILE = os.path.join(BASE_DIR, "image_links.txt")
+# image_links.txt nằm trong images/; vẫn hỗ trợ đặt ở thư mục gốc (cách cũ).
+LINKS_FILES = (
+    os.path.join(IMAGES_DIR, "image_links.txt"),
+    os.path.join(BASE_DIR, "image_links.txt"),
+)
 EXTENSIONS = ("png", "jpg", "jpeg")
 
 # Nút quay lại / lệnh khác tên nhưng dùng chung ảnh với trang gốc.
@@ -56,18 +48,20 @@ def canonical(key):
 def load_links():
     """Đọc image_links.txt -> {tên_ảnh: url}. Dòng sai/để trống bị bỏ qua."""
     links = {}
-    try:
-        with open(LINKS_FILE, encoding="utf-8-sig") as f:
-            for raw in f:
-                line = raw.strip()
-                if not line or line.startswith("#") or "=" not in line:
-                    continue
-                name, _, url = line.partition("=")
-                name, url = name.strip(), url.strip()
-                if name and url.lower().startswith(("http://", "https://")):
-                    links[name] = url
-    except OSError:
-        pass
+    # Duyệt ngược để file đứng trước (images/) ghi đè file đứng sau.
+    for path in reversed(LINKS_FILES):
+        try:
+            with open(path, encoding="utf-8-sig") as f:
+                for raw in f:
+                    line = raw.strip()
+                    if not line or line.startswith("#") or "=" not in line:
+                        continue
+                    name, _, url = line.partition("=")
+                    name, url = name.strip(), url.strip()
+                    if name and url.lower().startswith(("http://", "https://")):
+                        links[name] = url
+        except OSError:
+            continue
     return links
 
 
