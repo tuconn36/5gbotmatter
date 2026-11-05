@@ -76,6 +76,8 @@ def resolve_view(key):
     Dùng chung cho nút bấm, lệnh và tự động trả lời từ khóa để mọi nơi
     hiển thị giống hệt nhau.
     """
+    if key == "vpn":  # nút / lệnh cũ trong các tin nhắn đã gửi
+        key = "sni"
     if key in _HOME_KEYS:
         return MAIN_TEXT, main_keyboard()
     if key in _HELP_KEYS:
@@ -92,7 +94,7 @@ def resolve_view(key):
     if key in PACKAGE_TEXTS:
         back_to = PACKAGE_NETWORK.get(key, "gonen")
         return PACKAGE_TEXTS[key], package_back_keyboard(back_to)
-    if key in ("hotro", "vpn"):
+    if key in ("hotro", "sni"):
         return PAGES[key], support_keyboard()
     if key in PAGES:
         return PAGES[key], back_keyboard()
@@ -132,9 +134,9 @@ async def goi(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await _reply_view(update, "gonen")
 
 
-async def vpn(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    """Lối tắt tới trang VPN."""
-    await _reply_view(update, "vpn")
+async def sni(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Lối tắt tới trang Đổi SNI."""
+    await _reply_view(update, "sni")
 
 
 async def thueid(update: Update, context: ContextTypes.DEFAULT_TYPE):
