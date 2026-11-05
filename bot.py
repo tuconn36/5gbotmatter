@@ -42,7 +42,7 @@ MAX_RETRY_DELAY = 60
 BOT_COMMANDS = [
     BotCommand("start", "Mở menu chính"),
     BotCommand("goi", "Gói nền 4G/5G"),
-    BotCommand("vpn", "Dịch vụ VPN"),
+    BotCommand("sni", "Đổi SNI"),
     BotCommand("thueid", "Thuê ID Shadowrocket"),
     BotCommand("hotro", "Liên hệ hỗ trợ"),
     BotCommand("huongdan", "Hướng dẫn sử dụng"),
@@ -79,7 +79,7 @@ def register_handlers(app):
     app.add_handler(CommandHandler("ping", handlers.ping))
     # Lối tắt tới từng trang.
     app.add_handler(CommandHandler(["goi", "gonen"], handlers.goi))
-    app.add_handler(CommandHandler("vpn", handlers.vpn))
+    app.add_handler(CommandHandler(["sni", "vpn"], handlers.sni))
     app.add_handler(CommandHandler("thueid", handlers.thueid))
     app.add_handler(CommandHandler(["hotro", "support"], handlers.hotro))
     # Chỉ quản trị viên (kiểm tra trong handler).
