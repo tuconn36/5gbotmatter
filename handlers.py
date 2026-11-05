@@ -12,7 +12,9 @@ import admin as admin_module
 from config import is_admin
 from matching import normalize, pick_page
 from keyboards import (
+    app_keyboard,
     back_keyboard,
+    device_keyboard,
     goinen_keyboard,
     help_keyboard,
     main_keyboard,
@@ -23,6 +25,8 @@ from keyboards import (
     viettel_goi_keyboard,
 )
 from texts import (
+    APP_TEXTS,
+    DEVICE_TEXTS,
     FALLBACK_TEXT,
     GOI_NEN_TEXT,
     HELP_TEXT,
@@ -80,6 +84,10 @@ def resolve_view(key):
     if key in _NETWORK_PAGES:
         text, keyboard = _NETWORK_PAGES[key]
         return text, keyboard()
+    if key in DEVICE_TEXTS:
+        return DEVICE_TEXTS[key], device_keyboard(key)
+    if key in APP_TEXTS:
+        return APP_TEXTS[key], app_keyboard(key)
     if key in PACKAGE_TEXTS:
         back_to = PACKAGE_NETWORK.get(key, "gonen")
         return PACKAGE_TEXTS[key], package_back_keyboard(back_to)
