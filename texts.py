@@ -1,19 +1,3 @@
-"""Nội dung hiển thị của bot 5G MATTER.
-
-Tất cả nội dung dùng HTML parse mode của Telegram.
-Ký tự đặc biệt phải escape: & -> &amp; , < -> &lt; , > -> &gt;
-
-NGUYÊN TẮC THIẾT KẾ GIAO DIỆN
-------------------------------
-1. Mọi khối "thẻ" dùng <blockquote>. Đây là khung gạch dọc native của
-   Telegram: cạnh trái luôn thẳng hàng ở mọi client (kể cả khi client
-   dùng font tỉ lệ), khác với khung kín ╭─╮ bị lệch cạnh phải.
-2. Tiêu đề dùng <b>, mô tả phụ dùng <i>, giá / mã đăng ký dùng <code>
-   để nổi bật như một "chip" nhỏ.
-3. Nhãn mục dùng "▌ <b>TIÊU ĐỀ</b>" tạo cảm giác tab mở đầu khối.
-4. Không dùng quá nhiều ký tự trang trí: khoảng cách trắng + nhãn mục
-   đã đủ để tách khối, giữ tin nhắn gọn và dễ đọc trên màn hình nhỏ.
-"""
 
 # ==========================================
 # CÔNG CỤ ĐỊNH DẠNG
@@ -132,17 +116,19 @@ DEVICE_APPS = {
     },
 }
 
-_IMPORT = "Mở app → bấm <b>＋</b> → nhập cấu hình bot gửi (dán link hoặc chọn file)"
+_IMPORT = "Bấm <b>＋</b> → nhập cấu hình bot gửi (dán link hoặc chọn file)."
 
+# Mỗi app gồm nhiều BƯỚC; mỗi bước = (tiêu đề, nội dung) và là một trang riêng
+# có nút "Bước tiếp ▶". Ảnh của bước: images/<mã app>_<số bước>.png
 APP_GUIDES = {
     "android_v2rayng": {
         "device": "android",
         "name": "v2rayNG",
         "source": "tải trên CH Play",
         "steps": [
-            "① Tải <b>v2rayNG</b> trên CH Play",
-            f"② {_IMPORT}",
-            "③ Chọn cấu hình → bấm nút <b>▶</b> để kết nối",
+            ("Tải ứng dụng", "Tải <b>v2rayNG</b> trên CH Play rồi mở app."),
+            ("Nhập cấu hình", _IMPORT),
+            ("Kết nối", "Chọn cấu hình vừa nhập → bấm nút <b>▶</b> để kết nối."),
         ],
     },
     "android_happ": {
@@ -150,9 +136,9 @@ APP_GUIDES = {
         "name": "Happ",
         "source": "tải trên CH Play",
         "steps": [
-            "① Tải <b>Happ</b> trên CH Play",
-            f"② {_IMPORT}",
-            "③ Bấm nút kết nối là dùng được",
+            ("Tải ứng dụng", "Tải <b>Happ</b> trên CH Play rồi mở app."),
+            ("Nhập cấu hình", _IMPORT),
+            ("Kết nối", "Bấm nút kết nối là dùng được."),
         ],
     },
     "ios_shadowrocket": {
@@ -160,9 +146,10 @@ APP_GUIDES = {
         "name": "Shadowrocket",
         "source": "tải trên App Store (trả phí)",
         "steps": [
-            "① Tải <b>Shadowrocket</b> trên App Store",
-            "② Mở app → <b>＋</b> → <b>Import from File</b> → chọn file cấu hình",
-            "③ Bật công tắc kết nối → bấm <b>Allow</b> khi iPhone hỏi thêm VPN",
+            ("Tải ứng dụng", "Tải <b>Shadowrocket</b> trên App Store rồi mở app."),
+            ("Nhập cấu hình", "Bấm <b>＋</b> → <b>Import from File</b> → chọn file cấu hình."),
+            ("Kết nối", "Bật công tắc kết nối."),
+            ("Cho phép VPN", "Bấm <b>Allow</b> khi iPhone hỏi thêm cấu hình VPN."),
         ],
     },
     "ios_v2box": {
@@ -170,9 +157,9 @@ APP_GUIDES = {
         "name": "V2Box",
         "source": "tải trên App Store",
         "steps": [
-            "① Tải <b>V2Box</b> trên App Store",
-            f"② {_IMPORT}",
-            "③ Chọn máy chủ → bấm kết nối → bấm <b>Allow</b> khi iPhone hỏi thêm VPN",
+            ("Tải ứng dụng", "Tải <b>V2Box</b> trên App Store rồi mở app."),
+            ("Nhập cấu hình", _IMPORT),
+            ("Kết nối", "Chọn máy chủ → bấm kết nối → bấm <b>Allow</b> khi iPhone hỏi thêm VPN."),
         ],
     },
     "ios_happ": {
@@ -180,9 +167,9 @@ APP_GUIDES = {
         "name": "Happ",
         "source": "miễn phí trên App Store",
         "steps": [
-            "① Tải <b>Happ</b> trên App Store",
-            f"② {_IMPORT}",
-            "③ Bấm nút kết nối → bấm <b>Allow</b> khi iPhone hỏi thêm VPN",
+            ("Tải ứng dụng", "Tải <b>Happ</b> trên App Store rồi mở app."),
+            ("Nhập cấu hình", _IMPORT),
+            ("Kết nối", "Bấm nút kết nối → bấm <b>Allow</b> khi iPhone hỏi thêm VPN."),
         ],
     },
     "windows_v2rayn": {
@@ -190,9 +177,9 @@ APP_GUIDES = {
         "name": "v2rayN",
         "source": "tải miễn phí trên GitHub (2dust/v2rayN)",
         "steps": [
-            "① Tải <b>v2rayN</b>, giải nén rồi mở lên",
-            "② Menu <b>Servers</b> → <b>Import server from file</b> → chọn file",
-            "③ Chọn server → <b>Enter</b> → <b>Set as system proxy</b>",
+            ("Tải ứng dụng", "Tải <b>v2rayN</b>, giải nén rồi mở lên."),
+            ("Nhập cấu hình", "Menu <b>Servers</b> → <b>Import server from file</b> → chọn file."),
+            ("Kết nối", "Chọn server → <b>Enter</b> → <b>Set as system proxy</b>."),
         ],
         "tip": "Muốn tắt: bỏ chọn <b>System proxy</b> trong v2rayN.",
     },
@@ -201,9 +188,9 @@ APP_GUIDES = {
         "name": "Happ",
         "source": "tải bản Windows trên trang chủ Happ",
         "steps": [
-            "① Tải <b>Happ</b> bản Windows rồi mở lên",
-            f"② {_IMPORT}",
-            "③ Bấm nút kết nối là dùng được",
+            ("Tải ứng dụng", "Tải <b>Happ</b> bản Windows rồi mở lên."),
+            ("Nhập cấu hình", _IMPORT),
+            ("Kết nối", "Bấm nút kết nối là dùng được."),
         ],
     },
 }
@@ -228,29 +215,38 @@ def render_device(device):
     ])
 
 
-def render_app(app_id):
-    """Trang hướng dẫn 3 bước cho một app."""
+def render_step(app_id, number):
+    """Một bước trong hướng dẫn của app (có thanh tiến độ)."""
     app = APP_GUIDES[app_id]
     info = DEVICE_APPS[app["device"]]
+    total = len(app["steps"])
+    title, detail = app["steps"][number - 1]
+    progress = "▰" * number + "▱" * (total - number)
     blocks = [
-        f"{info['icon']} <b>{app['name']}</b> · <i>{info['name']}</i>\n"
-        f"<i>{_capitalize(app['source'])}</i>",
-        card(app["steps"]),
+        f"{info['icon']} <b>{app['name']}</b> · <i>{info['name']}</i>",
+        f"<b>Bước {number}/{total}</b> · {title}\n{progress}",
+        card([detail]),
     ]
-    if app.get("tip"):
-        blocks.append(f"💡 {app['tip']}")
-    blocks.append("💬 Cần hỗ trợ? Bấm <b>Chat quản trị viên</b>.")
+    if number == total:
+        if app.get("tip"):
+            blocks.append(f"💡 {app['tip']}")
+        blocks.append("🎉 Xong rồi, chúc bạn dùng vui vẻ!")
     return "\n\n".join(blocks)
 
 
 # Trang chọn app theo thiết bị: callback_data = "android" / "ios" / "windows".
 DEVICE_TEXTS = {device: render_device(device) for device in DEVICE_APPS}
 
-# Trang hướng dẫn từng app: callback_data = "app_<mã app>".
-APP_TEXTS = {f"app_{app_id}": render_app(app_id) for app_id in APP_GUIDES}
-
-# "app_<mã app>" -> thiết bị, để nút quay lại về đúng trang chọn app.
-APP_DEVICE = {f"app_{app_id}": app["device"] for app_id, app in APP_GUIDES.items()}
+# Trang từng bước: callback_data = "step_<mã app>_<số bước>".
+STEP_TEXTS = {}
+# "step_..." -> (mã app, số bước, tổng số bước, thiết bị) để dựng nút điều hướng.
+STEP_INFO = {}
+for _app_id, _app in APP_GUIDES.items():
+    _total = len(_app["steps"])
+    for _number in range(1, _total + 1):
+        _key = f"step_{_app_id}_{_number}"
+        STEP_TEXTS[_key] = render_step(_app_id, _number)
+        STEP_INFO[_key] = (_app_id, _number, _total, _app["device"])
 
 
 PAGES = {
