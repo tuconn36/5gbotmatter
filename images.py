@@ -20,7 +20,7 @@ from telegram import LinkPreviewOptions
 from config import BASE_DIR
 
 IMAGES_DIR = os.path.join(BASE_DIR, "images")
-LINKS_FILE = os.path.join(BASE_DIR, "image_links.txt")
+LINKS_FILE = os.path.join(BASE_DIR, "img.txt")
 EXTENSIONS = ("png", "jpg", "jpeg")
 
 # Nút quay lại / lệnh khác tên nhưng dùng chung ảnh với trang gốc.
