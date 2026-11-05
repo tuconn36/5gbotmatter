@@ -85,17 +85,13 @@ WEBSITE_LINE = f'🌐 <a href="{WEBSITE}">5gmatter.site</a>'
 # ==========================================
 MAIN_TEXT = "\n\n".join([
     "✨ <b>5G MATTER</b>\n<i>⚡ Tự động · Nhanh chóng · Bảo mật</i>",
-    SEP,
-    section("THEO THIẾT BỊ") + "\n" + card([
-        "Chọn thiết bị của bạn để xem hướng dẫn cài đặt",
-        "và cách dùng đầy đủ.",
+    card([
+        "📱 Chọn thiết bị bên dưới để xem cách cài đặt",
+        "📶 <b>Gói nền 4G/5G</b> — giá theo nhà mạng",
+        "🛡️ <b>VPN</b> — ẩn IP, mở khóa nội dung",
+        "🔐 <b>Thuê ID Shadowrocket</b>",
     ]),
-    section("GÓI CƯỚC &amp; DỊCH VỤ") + "\n" + card([
-        "📶 <b>Gói nền 4G/5G</b> — bảng giá theo Viettel, VinaPhone, MobiFone",
-        "🛡️ <b>Dịch vụ VPN</b> — ẩn IP, mở khóa nội dung",
-        "🔐 <b>Thuê ID Shadowrocket</b> — hỗ trợ tải ứng dụng",
-    ]),
-    "💬 Cần hỗ trợ? Bấm nút <b>Liên hệ hỗ trợ</b> bên dưới.",
+    "💬 Cần hỗ trợ? Bấm <b>Liên hệ hỗ trợ</b>.",
 ])
 
 
@@ -103,83 +99,161 @@ MAIN_TEXT = "\n\n".join([
 # HƯỚNG DẪN SỬ DỤNG
 # ==========================================
 HELP_TEXT = "\n\n".join([
-    "❓ <b>HƯỚNG DẪN SỬ DỤNG</b>\n<i>Bot tự hiểu từ khóa, không cần nhớ lệnh</i>",
-    section("CÁCH 1 — DÙNG NÚT") + "\n" + card([
-        "Chọn thiết bị hoặc gói cước ngay trên menu,",
-        "bot sẽ mở đúng trang hướng dẫn.",
-    ]),
-    section("CÁCH 2 — GÕ TỪ KHÓA") + "\n" + card([
-        "Gõ <code>iphone</code>, <code>android</code>, <code>windows</code>,",
-        "<code>gói nền</code>, <code>vpn</code>, <code>thuê id</code>, <code>hỗ trợ</code>…",
-        "Bot sẽ tự động trả lời đúng trang.",
+    "❓ <b>HƯỚNG DẪN SỬ DỤNG</b>\n<i>Bấm nút hoặc gõ từ khóa, không cần nhớ lệnh</i>",
+    card([
+        "👆 <b>Bấm nút</b> trên menu để chọn thiết bị hoặc gói cước",
+        "⌨️ <b>Gõ từ khóa</b>: <code>iphone</code>, <code>android</code>, "
+        "<code>windows</code>, <code>gói nền</code>, <code>vpn</code>, <code>hỗ trợ</code>",
     ]),
     section("LỆNH NHANH") + "\n" + card([
         "<code>/start</code> · <code>/goi</code> · <code>/vpn</code> · "
         "<code>/thueid</code> · <code>/hotro</code>",
         "<code>/huongdan</code> · <code>/id</code> · <code>/ping</code>",
     ]),
-    "💬 Cần trợ giúp? Bấm nút <b>Liên hệ hỗ trợ</b>.",
 ])
 
 
 # ==========================================
 # CÁC TRANG NỘI DUNG
 # ==========================================
-def _device_page(icon, name, steps):
-    """Dựng trang hướng dẫn cho một thiết bị.
+# Thiết bị -> danh sách app. Thêm/bớt app chỉ cần sửa APP_GUIDES và DEVICE_APPS.
+DEVICE_APPS = {
+    "android": {
+        "icon": "🤖", "name": "Android",
+        "apps": ["android_v2rayng", "android_happ"],
+    },
+    "ios": {
+        "icon": "🍎", "name": "iOS",
+        "apps": ["ios_shadowrocket", "ios_v2box", "ios_happ"],
+    },
+    "windows": {
+        "icon": "🖥️", "name": "Windows",
+        "apps": ["windows_v2rayn", "windows_happ"],
+    },
+}
 
-    steps: danh sách các bước (mỗi bước một dòng) đã escape sẵn.
-    """
+_IMPORT = "Mở app → bấm <b>＋</b> → nhập cấu hình bot gửi (dán link hoặc chọn file)"
+
+APP_GUIDES = {
+    "android_v2rayng": {
+        "device": "android",
+        "name": "v2rayNG",
+        "source": "tải trên CH Play",
+        "steps": [
+            "① Tải <b>v2rayNG</b> trên CH Play",
+            f"② {_IMPORT}",
+            "③ Chọn cấu hình → bấm nút <b>▶</b> để kết nối",
+        ],
+    },
+    "android_happ": {
+        "device": "android",
+        "name": "Happ",
+        "source": "tải trên CH Play",
+        "steps": [
+            "① Tải <b>Happ</b> trên CH Play",
+            f"② {_IMPORT}",
+            "③ Bấm nút kết nối là dùng được",
+        ],
+    },
+    "ios_shadowrocket": {
+        "device": "ios",
+        "name": "Shadowrocket",
+        "source": "tải trên App Store (trả phí)",
+        "steps": [
+            "① Tải <b>Shadowrocket</b> trên App Store",
+            "② Mở app → <b>＋</b> → <b>Import from File</b> → chọn file cấu hình",
+            "③ Bật công tắc kết nối → bấm <b>Allow</b> khi iPhone hỏi thêm VPN",
+        ],
+    },
+    "ios_v2box": {
+        "device": "ios",
+        "name": "V2Box",
+        "source": "tải trên App Store",
+        "steps": [
+            "① Tải <b>V2Box</b> trên App Store",
+            f"② {_IMPORT}",
+            "③ Chọn máy chủ → bấm kết nối → bấm <b>Allow</b> khi iPhone hỏi thêm VPN",
+        ],
+    },
+    "ios_happ": {
+        "device": "ios",
+        "name": "Happ",
+        "source": "miễn phí trên App Store",
+        "steps": [
+            "① Tải <b>Happ</b> trên App Store",
+            f"② {_IMPORT}",
+            "③ Bấm nút kết nối → bấm <b>Allow</b> khi iPhone hỏi thêm VPN",
+        ],
+    },
+    "windows_v2rayn": {
+        "device": "windows",
+        "name": "v2rayN",
+        "source": "tải miễn phí trên GitHub (2dust/v2rayN)",
+        "steps": [
+            "① Tải <b>v2rayN</b>, giải nén rồi mở lên",
+            "② Menu <b>Servers</b> → <b>Import server from file</b> → chọn file",
+            "③ Chọn server → <b>Enter</b> → <b>Set as system proxy</b>",
+        ],
+        "tip": "Muốn tắt: bỏ chọn <b>System proxy</b> trong v2rayN.",
+    },
+    "windows_happ": {
+        "device": "windows",
+        "name": "Happ",
+        "source": "tải bản Windows trên trang chủ Happ",
+        "steps": [
+            "① Tải <b>Happ</b> bản Windows rồi mở lên",
+            f"② {_IMPORT}",
+            "③ Bấm nút kết nối là dùng được",
+        ],
+    },
+}
+
+
+def _capitalize(text):
+    return text[:1].upper() + text[1:]
+
+
+def render_device(device):
+    """Trang chọn app cho một thiết bị."""
+    info = DEVICE_APPS[device]
+    lines = [
+        f"• <b>{APP_GUIDES[app_id]['name']}</b> — {APP_GUIDES[app_id]['source']}"
+        for app_id in info["apps"]
+    ]
     return "\n\n".join([
-        f"{icon} <b>{name.upper()}</b>\n"
-        f"<i>Hướng dẫn cài đặt &amp; sử dụng trên {name}</i>",
-        section("TRƯỚC KHI BẮT ĐẦU") + "\n" + card([
-            "① Mở <b>Telegram</b> và nhắn tin cho bot",
-            "② Chọn <b>Gói nền 4G/5G</b> đúng nhà mạng của bạn",
-            "③ Nhận file cấu hình và làm theo hướng dẫn",
-        ]),
-        section("DỊCH VỤ PHÙ HỢP") + "\n" + card([
-            "📶 <b>Gói nền 4G/5G</b> — data nền ưu tiên cho mọi app",
-            "🛡️ <b>Dịch vụ VPN</b> — ẩn IP, mở khóa nội dung",
-        ]),
-        section("HƯỚNG DẪN CÀI ĐẶT") + "\n" + card(steps),
-        section("CẦN HỖ TRỢ") + "\n" + card([
-            "💬 Bấm nút <b>Liên hệ hỗ trợ</b> để được admin hỗ trợ trực tiếp.",
-            f"📝 Hoặc đăng ký tại {WEBSITE_LINE}",
-        ]),
+        f"{info['icon']} <b>{info['name'].upper()}</b>\n"
+        "<i>Chọn một ứng dụng để xem hướng dẫn</i>",
+        card(lines),
+        "💡 Cần có cấu hình mà bot gửi sau khi đăng ký gói nền.",
     ])
 
 
+def render_app(app_id):
+    """Trang hướng dẫn 3 bước cho một app."""
+    app = APP_GUIDES[app_id]
+    info = DEVICE_APPS[app["device"]]
+    blocks = [
+        f"{info['icon']} <b>{app['name']}</b> · <i>{info['name']}</i>\n"
+        f"<i>{_capitalize(app['source'])}</i>",
+        card(app["steps"]),
+    ]
+    if app.get("tip"):
+        blocks.append(f"💡 {app['tip']}")
+    blocks.append("💬 Cần hỗ trợ? Bấm <b>Chat quản trị viên</b>.")
+    return "\n\n".join(blocks)
+
+
+# Trang chọn app theo thiết bị: callback_data = "android" / "ios" / "windows".
+DEVICE_TEXTS = {device: render_device(device) for device in DEVICE_APPS}
+
+# Trang hướng dẫn từng app: callback_data = "app_<mã app>".
+APP_TEXTS = {f"app_{app_id}": render_app(app_id) for app_id in APP_GUIDES}
+
+# "app_<mã app>" -> thiết bị, để nút quay lại về đúng trang chọn app.
+APP_DEVICE = {f"app_{app_id}": app["device"] for app_id, app in APP_GUIDES.items()}
+
+
 PAGES = {
-    "android": _device_page(
-        "🤖",
-        "Android",
-        [
-            "① Cài <b>v2rayNG</b> từ <b>Google Play</b>",
-            "② Mở app → bấm <b>＋</b> → chọn nhập cấu hình từ <b>file</b> "
-            "(hoặc <b>clipboard</b>) mà bot đã gửi",
-            "③ Chọn cấu hình vừa nhập → bấm nút <b>▶</b> để kết nối",
-        ],
-    ),
-    "ios": _device_page(
-        "🍎",
-        "iOS",
-        [
-            "① Tải <b>Shadowrocket</b> từ <b>App Store</b> (bản trả phí)",
-            "② Mở app → <b>＋</b> → <b>Import from File</b> → chọn file cấu hình",
-            "③ Bật công tắc kết nối → cho phép thêm cấu hình VPN proxy",
-        ],
-    ),
-    "windows": _device_page(
-        "🖥️",
-        "Windows",
-        [
-            "① Cài <b>v2rayN</b> rồi mở lên",
-            "② Menu <b>Servers</b> → <b>Import server from file</b> → chọn file cấu hình",
-            "③ Bấm <b>Enter</b> để chọn server, rồi <b>Set as system proxy</b>",
-            "④ Tắt kết nối: bỏ chọn <b>System proxy</b> trong v2rayN",
-        ],
-    ),
     "gonen": "\n\n".join([
         "📶 <b>GÓI NỀN 4G/5G</b>\n"
         "<i>Đăng ký gói nền để có data ưu tiên trên mọi ứng dụng</i>",
@@ -205,32 +279,25 @@ PAGES = {
     "hotro": "\n\n".join([
         "🎧 <b>LIÊN HỆ HỖ TRỢ</b>\n"
         "<i>Đội ngũ 5G MATTER sẵn sàng hỗ trợ bạn</i>",
-        section("LIÊN HỆ NHANH NHẤT") + "\n" + card([
+        card([
             f"💬 Quản trị viên: <b>@{ADMIN_USERNAME}</b>",
             WEBSITE_LINE,
-        ]),
-        section("MẸO NHANH") + "\n" + card([
-            "🆔 Nhấn <code>/id</code> để lấy ID Telegram của bạn,",
-            "gửi kèm ID khi cần hỗ trợ để được phản hồi nhanh hơn.",
+            "🆔 Gửi kèm ID của bạn (lệnh <code>/id</code>) để được xử lý nhanh hơn",
         ]),
     ]),
     "vpn": "\n\n".join([
         "🛡️ <b>DỊCH VỤ VPN</b>\n"
         "<i>Kết nối an toàn · Ẩn IP · Mở khóa nội dung</i>",
-        section("TÍNH NĂNG") + "\n" + card([
-            "🌍 <b>Đa quốc gia</b> — nhiều vị trí máy chủ",
-            "⚡ <b>Tốc độ cao</b> — ổn định, không giật lag",
-            "🎬 <b>Mở khóa nội dung</b> — xem nội dung bị chặn theo vùng",
-        ]),
-        section("HƯỚNG DẪN CÀI ĐẶT") + "\n" + card([
-            "① Cài <b>Shadowrocket</b> (iOS), <b>v2rayNG</b> (Android) hoặc <b>v2rayN</b> (Windows)",
-            "② Nhập file cấu hình mà bot gửi cho bạn qua <b>Import</b>",
-            "③ Bật công tắc kết nối và chọn server phù hợp",
+        card([
+            "🌍 Nhiều quốc gia, nhiều máy chủ",
+            "⚡ Tốc độ cao, ổn định",
+            "🎬 Xem được nội dung bị chặn theo vùng",
         ]),
         section("GÓI DỊCH VỤ") + "\n" + card([
-            "⏳ Thời hạn: <b>1 tháng</b> · <b>3 tháng</b> · <b>12 tháng</b>",
-            "📱 Hỗ trợ: <b>Android</b> · <b>iOS</b> · <b>Windows</b>",
+            "⏳ <b>1 tháng</b> · <b>3 tháng</b> · <b>12 tháng</b>",
+            "📱 Android · iOS · Windows",
         ]),
+        "👉 Chọn thiết bị ở menu chính để xem cách cài app.",
     ]),
     "huongdan": HELP_TEXT,
 }
@@ -385,8 +452,7 @@ def render_network(network, only_key=None):
 
     blocks = [
         f"{icon} <b>{title}</b>\n{subtitle}",
-        section("⚠️ LƯU Ý BẮT BUỘC") + "\n" + card([REGISTER_WARNING]),
-        section("CÁC GÓI HIỆN CÓ"),
+        REGISTER_WARNING,
     ]
     for package in packages:
         blocks.append(package_card(package))
@@ -454,15 +520,8 @@ def restart_requested_text():
     """Nội dung phản hồi khi quản trị viên yêu cầu khởi động lại bot."""
     return "\n\n".join([
         "♻️ <b>ĐANG KHỞI ĐỘNG LẠI BOT</b>\n"
-        "<i>Lệnh đã được gửi tới máy chủ</i>",
-        section("TRẠNG THÁI") + "\n" + card([
-            "⏳ Đang tạo phiên chạy mới trên GitHub Actions…",
-            "⏱️ Bot sẽ trở lại sau khoảng 1–2 phút.",
-        ]),
-        section("LƯU Ý") + "\n" + card([
-            "🔕 Bot sẽ ngừng phản hồi trong lúc khởi động lại.",
-            "🆔 Nhắn <code>/id</code> nếu cần kiểm tra lại thông tin.",
-        ]),
+        "<i>Bot sẽ trở lại sau khoảng 1–2 phút</i>",
+        "🔕 Trong lúc này bot sẽ tạm ngừng phản hồi.",
     ])
 
 
