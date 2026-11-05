@@ -227,7 +227,10 @@ async def safe_edit(
         )
     except BadRequest as error:
         raw = getattr(error, "message", None) or str(error)
-        if raw.strip().casefold().endswith("message is not modified"):
+        # Thông báo đầy đủ: "Message is not modified: specified new message
+        # content and reply markup are exactly the same as ..." -> phải
+        # kiểm tra theo kiểu "chứa", không phải "kết thúc bằng".
+        if "message is not modified" in raw.casefold():
             logger.debug("Bỏ qua lỗi 'message is not modified'")
             return
         logger.warning("Không sửa được message: %s", error)
