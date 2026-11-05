@@ -1,9 +1,3 @@
-"""Khớp từ khóa tiếng Việt (không phụ thuộc Telegram, dễ kiểm thử).
-
-Điểm quan trọng: so khớp KHÔNG phân biệt dấu và dạng Unicode.
-"gói nền", "goi nen" và "gói nền" (dạng NFD do một số bàn phím gửi)
-đều khớp cùng một từ khóa.
-"""
 
 import re
 import unicodedata
@@ -19,9 +13,9 @@ def normalize(text):
 
 # Từ khóa viết có dấu cho dễ đọc; sẽ được chuẩn hoá khi nạp.
 KEYWORDS = {
-    "vpn": [
-        "vpn", "vpn free", "vpn premium", "đổi ip", "ẩn ip", "unlock",
-        "mở khóa", "bypass", "proxy", "socks5",
+    "sni": [
+        "sni", "đổi sni", "doi sni", "vpn", "vpn free", "vpn premium",
+        "đổi ip", "ẩn ip", "unlock", "mở khóa", "bypass", "proxy", "socks5",
     ],
     "ios": ["ios", "iphone", "ipad"],
     "android": ["android", "ard"],
@@ -50,7 +44,7 @@ PAGE_PRIORITY = {
     "hotro": 3,
     "gonen": 3,
     "thueid": 3,
-    "vpn": 3,
+    "sni": 3,
 }
 
 
