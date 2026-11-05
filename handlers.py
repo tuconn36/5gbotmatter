@@ -17,6 +17,8 @@ from keyboards import (
     device_keyboard,
     goinen_keyboard,
     help_keyboard,
+    sni_keyboard,
+    sni_option_keyboard,
     step_keyboard,
     main_keyboard,
     mobi_goi_keyboard,
@@ -94,7 +96,11 @@ def resolve_view(key):
     if key in PACKAGE_TEXTS:
         back_to = PACKAGE_NETWORK.get(key, "gonen")
         return PACKAGE_TEXTS[key], package_back_keyboard(back_to)
-    if key in ("hotro", "sni"):
+    if key == "sni":
+        return PAGES["sni"], sni_keyboard()
+    if key in ("sni_khongnen", "sni_conen"):
+        return PAGES[key], sni_option_keyboard()
+    if key == "hotro":
         return PAGES[key], support_keyboard()
     if key in PAGES:
         return PAGES[key], back_keyboard()
