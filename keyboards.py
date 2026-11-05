@@ -7,6 +7,7 @@ Nhãn nút dùng emoji + chữ viết tắt để nhìn gọn trên màn hình h
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 
 from config import ADMIN_URL, WEBSITE
+from texts import APP_DEVICE, APP_GUIDES, DEVICE_APPS
 
 
 def main_keyboard():
@@ -128,6 +129,34 @@ def support_keyboard():
         ],
         [
             InlineKeyboardButton("🌐 Mở website 5G MATTER", url=WEBSITE),
+        ],
+        [
+            InlineKeyboardButton("🏠 Menu chính", callback_data="home"),
+        ],
+    ])
+
+
+def device_keyboard(device):
+    """Danh sách app của một thiết bị (mỗi app một nút)."""
+    rows = [
+        [InlineKeyboardButton(
+            f"📲 {APP_GUIDES[app_id]['name']}",
+            callback_data=f"app_{app_id}",
+        )]
+        for app_id in DEVICE_APPS[device]["apps"]
+    ]
+    rows.append([InlineKeyboardButton("🏠 Menu chính", callback_data="home")])
+    return InlineKeyboardMarkup(rows)
+
+
+def app_keyboard(app_key):
+    """Nút dưới trang hướng dẫn một app."""
+    return InlineKeyboardMarkup([
+        [
+            InlineKeyboardButton("🔙 Chọn app khác", callback_data=APP_DEVICE[app_key]),
+        ],
+        [
+            InlineKeyboardButton("💬 Chat quản trị viên", url=ADMIN_URL),
         ],
         [
             InlineKeyboardButton("🏠 Menu chính", callback_data="home"),
