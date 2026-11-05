@@ -59,8 +59,8 @@ def viettel_goi_keyboard():
     """Các gói Viettel."""
     return InlineKeyboardMarkup([
         [
-            InlineKeyboardButton("🎵 TikTok 50K", callback_data="pkg_viettel_tiktok"),
             InlineKeyboardButton("📆 Tuần T15KN", callback_data="pkg_viettel_t15kn"),
+            InlineKeyboardButton("🎵 TikTok 50K", callback_data="pkg_viettel_tiktok"),
             InlineKeyboardButton("💪 Gói MXH100", callback_data="pkg_viettel_mxh100"),
         ],
         [
