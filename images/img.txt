@@ -1,0 +1,49 @@
+# LINK ẢNH MINH HOẠ CHO BOT
+# Mỗi dòng:  tên_ảnh = link
+# Dán link ảnh TRỰC TIẾP (thường kết thúc .png / .jpg) ngay sau dấu =
+# Dòng để trống (chưa dán link) hoặc bắt đầu bằng # sẽ bị bỏ qua.
+# Sửa xong thì chạy lại bot (hủy phiên cũ rồi Run workflow).
+
+# ===== ẢNH TỪNG BƯỚC HƯỚNG DẪN =====
+android_v2rayng_1 =
+android_v2rayng_2 =
+android_v2rayng_3 =
+android_happ_1 =
+android_happ_2 =
+android_happ_3 =
+ios_shadowrocket_1 =
+ios_shadowrocket_2 =
+ios_shadowrocket_3 =
+ios_shadowrocket_4 =
+ios_v2box_1 =
+ios_v2box_2 =
+ios_v2box_3 =
+ios_happ_1 =
+ios_happ_2 =
+ios_happ_3 =
+windows_v2rayn_1 =
+windows_v2rayn_2 =
+windows_v2rayn_3 =
+windows_happ_1 =
+windows_happ_2 =
+windows_happ_3 =
+
+# ===== ẢNH CÁC TRANG KHÁC =====
+home =
+android =
+ios =
+windows =
+gonen =
+net_viettel =
+net_vina =
+net_mobi =
+pkg_vina_0 =
+pkg_vina_30 =
+pkg_viettel_tiktok =
+pkg_viettel_t15kn =
+pkg_viettel_mxh100 =
+pkg_mobi_tiktok =
+vpn =
+thueid =
+hotro =
+huongdan =
