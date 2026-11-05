@@ -1,19 +1,4 @@
-"""Nội dung hiển thị của bot 5G MATTER.
-
-Tất cả nội dung dùng HTML parse mode của Telegram.
-Ký tự đặc biệt phải escape: & -> &amp; , < -> &lt; , > -> &gt;
-
-NGUYÊN TẮC THIẾT KẾ GIAO DIỆN
-------------------------------
-1. Mọi khối "thẻ" dùng <blockquote>. Đây là khung gạch dọc native của
-   Telegram: cạnh trái luôn thẳng hàng ở mọi client (kể cả khi client
-   dùng font tỉ lệ), khác với khung kín ╭─╮ bị lệch cạnh phải.
-2. Tiêu đề dùng <b>, mô tả phụ dùng <i>, giá / mã đăng ký dùng <code>
-   để nổi bật như một "chip" nhỏ.
-3. Nhãn mục dùng "▌ <b>TIÊU ĐỀ</b>" tạo cảm giác tab mở đầu khối.
-4. Không dùng quá nhiều ký tự trang trí: khoảng cách trắng + nhãn mục
-   đã đủ để tách khối, giữ tin nhắn gọn và dễ đọc trên màn hình nhỏ.
-"""
+"""Nội dung hiển thị của bot 5G MATTER."""
 
 # ==========================================
 # CÔNG CỤ ĐỊNH DẠNG
@@ -550,7 +535,7 @@ def restart_failed_text(reason):
             f"🧾 <code>{escape(reason)}</code>",
         ]),
         section("CÁCH XỬ LÝ") + "\n" + card([
-            "🌐 Vào GitHub → tab <b>Actions</b> → <b>Telegram Bot</b>.",
+            "🌐 Vào GitHub → tab <b>Actions</b> → <b>5G MATTER Bot</b>.",
             "🔁 Bấm <b>Run workflow</b> để chạy lại bot.",
         ]),
     ])
