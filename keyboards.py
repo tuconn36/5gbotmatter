@@ -156,9 +156,6 @@ def app_keyboard(app_key):
             InlineKeyboardButton("🔙 Chọn app khác", callback_data=APP_DEVICE[app_key]),
         ],
         [
-            InlineKeyboardButton("💬 Chat quản trị viên", url=ADMIN_URL),
-        ],
-        [
             InlineKeyboardButton("🏠 Menu chính", callback_data="home"),
         ],
     ])
