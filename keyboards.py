@@ -22,7 +22,7 @@ def main_keyboard():
             InlineKeyboardButton("📶 Gói nền 4G/5G", callback_data="gonen"),
         ],
         [
-            InlineKeyboardButton("🛡️ Dịch vụ VPN", callback_data="vpn"),
+            InlineKeyboardButton("🔁 Đổi SNI", callback_data="sni"),
             InlineKeyboardButton("🔐 Thuê ID Shadowrocket", callback_data="thueid"),
         ],
         [
