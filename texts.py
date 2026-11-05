@@ -88,7 +88,7 @@ MAIN_TEXT = "\n\n".join([
     card([
         "📱 Chọn thiết bị bên dưới để xem cách cài đặt",
         "📶 <b>Gói nền 4G/5G</b> — giá theo nhà mạng",
-        "🔁 <b>Đổi SNI</b>",
+        "🔁 <b>Đổi SNI</b> — có nền / không nền",
         "🔐 <b>Thuê ID Shadowrocket</b>",
     ]),
     "💬 Cần hỗ trợ? Bấm <b>Liên hệ hỗ trợ</b>.",
@@ -299,12 +299,21 @@ PAGES = {
     ]),
     "sni": "\n\n".join([
         "🔁 <b>ĐỔI SNI</b>\n"
-        "<i>Hỗ trợ đổi SNI cho cấu hình của bạn</i>",
+        "<i>Chọn loại SIM của bạn để xem hướng dẫn</i>",
         card([
-            f"📩 Nhắn quản trị viên <b>@{ADMIN_USERNAME}</b> để được tư vấn",
-            WEBSITE_LINE,
+            "🚫 <b>Không nền</b> — SIM VinaPhone 0đ",
+            "✅ <b>Có nền</b> — tất cả các SIM còn lại",
         ]),
-        "👉 Bấm <b>Chat quản trị viên</b> bên dưới để bắt đầu.",
+    ]),
+    "sni_khongnen": "\n\n".join([
+        "🚫 <b>ĐỔI SNI · KHÔNG NỀN</b>\n"
+        "<i>Dành cho SIM VinaPhone 0đ</i>",
+        card(["📸 Làm theo ảnh hướng dẫn."]),
+    ]),
+    "sni_conen": "\n\n".join([
+        "✅ <b>ĐỔI SNI · CÓ NỀN</b>\n"
+        "<i>Dành cho tất cả các SIM còn lại (có gói nền)</i>",
+        card(["📸 Làm theo ảnh hướng dẫn."]),
     ]),
     "huongdan": HELP_TEXT,
 }
