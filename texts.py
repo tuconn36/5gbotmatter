@@ -1,3 +1,19 @@
+"""Nội dung hiển thị của bot 5G MATTER.
+
+Tất cả nội dung dùng HTML parse mode của Telegram.
+Ký tự đặc biệt phải escape: & -> &amp; , < -> &lt; , > -> &gt;
+
+NGUYÊN TẮC THIẾT KẾ GIAO DIỆN
+------------------------------
+1. Mọi khối "thẻ" dùng <blockquote>. Đây là khung gạch dọc native của
+   Telegram: cạnh trái luôn thẳng hàng ở mọi client (kể cả khi client
+   dùng font tỉ lệ), khác với khung kín ╭─╮ bị lệch cạnh phải.
+2. Tiêu đề dùng <b>, mô tả phụ dùng <i>, giá / mã đăng ký dùng <code>
+   để nổi bật như một "chip" nhỏ.
+3. Nhãn mục dùng "▌ <b>TIÊU ĐỀ</b>" tạo cảm giác tab mở đầu khối.
+4. Không dùng quá nhiều ký tự trang trí: khoảng cách trắng + nhãn mục
+   đã đủ để tách khối, giữ tin nhắn gọn và dễ đọc trên màn hình nhỏ.
+"""
 
 # ==========================================
 # CÔNG CỤ ĐỊNH DẠNG
@@ -72,7 +88,7 @@ MAIN_TEXT = "\n\n".join([
     card([
         "📱 Chọn thiết bị bên dưới để xem cách cài đặt",
         "📶 <b>Gói nền 4G/5G</b> — giá theo nhà mạng",
-        "🛡️ <b>VPN</b> — ẩn IP, mở khóa nội dung",
+        "🔁 <b>Đổi SNI</b>",
         "🔐 <b>Thuê ID Shadowrocket</b>",
     ]),
     "💬 Cần hỗ trợ? Bấm <b>Liên hệ hỗ trợ</b>.",
@@ -87,10 +103,10 @@ HELP_TEXT = "\n\n".join([
     card([
         "👆 <b>Bấm nút</b> trên menu để chọn thiết bị hoặc gói cước",
         "⌨️ <b>Gõ từ khóa</b>: <code>iphone</code>, <code>android</code>, "
-        "<code>windows</code>, <code>gói nền</code>, <code>vpn</code>, <code>hỗ trợ</code>",
+        "<code>windows</code>, <code>gói nền</code>, <code>sni</code>, <code>hỗ trợ</code>",
     ]),
     section("LỆNH NHANH") + "\n" + card([
-        "<code>/start</code> · <code>/goi</code> · <code>/vpn</code> · "
+        "<code>/start</code> · <code>/goi</code> · <code>/sni</code> · "
         "<code>/thueid</code> · <code>/hotro</code>",
         "<code>/huongdan</code> · <code>/id</code> · <code>/ping</code>",
     ]),
@@ -281,19 +297,14 @@ PAGES = {
             "🆔 Gửi kèm ID của bạn (lệnh <code>/id</code>) để được xử lý nhanh hơn",
         ]),
     ]),
-    "vpn": "\n\n".join([
-        "🛡️ <b>DỊCH VỤ VPN</b>\n"
-        "<i>Kết nối an toàn · Ẩn IP · Mở khóa nội dung</i>",
+    "sni": "\n\n".join([
+        "🔁 <b>ĐỔI SNI</b>\n"
+        "<i>Hỗ trợ đổi SNI cho cấu hình của bạn</i>",
         card([
-            "🌍 Nhiều quốc gia, nhiều máy chủ",
-            "⚡ Tốc độ cao, ổn định",
-            "🎬 Xem được nội dung bị chặn theo vùng",
+            f"📩 Nhắn quản trị viên <b>@{ADMIN_USERNAME}</b> để được tư vấn",
+            WEBSITE_LINE,
         ]),
-        section("GÓI DỊCH VỤ") + "\n" + card([
-            "⏳ <b>1 tháng</b> · <b>3 tháng</b> · <b>12 tháng</b>",
-            "📱 Android · iOS · Windows",
-        ]),
-        "👉 Chọn thiết bị ở menu chính để xem cách cài app.",
+        "👉 Bấm <b>Chat quản trị viên</b> bên dưới để bắt đầu.",
     ]),
     "huongdan": HELP_TEXT,
 }
@@ -554,5 +565,5 @@ def restart_not_allowed_text():
 FALLBACK_TEXT = (
     "🤔 <b>Mình chưa hiểu ý bạn</b>\n"
     "<i>Thử gõ từ khóa như <code>iphone</code>, <code>gói nền</code>, "
-    "<code>vpn</code> hoặc bấm /menu để xem danh sách.</i>"
+    "<code>sni</code> hoặc bấm /menu để xem danh sách.</i>"
 )
