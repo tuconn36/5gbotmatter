@@ -1,5 +1,6 @@
 """Điểm khởi chạy bot 5G MATTER."""
 
+import asyncio
 import logging
 import sys
 import time
@@ -95,8 +96,8 @@ def register_handlers(app):
 def build_application():
     """Tạo Application mới từ BOT_TOKEN.
 
-    Mỗi lần thử lại phải dùng Application MỚI: sau khi run_polling()
-    thoát, event loop của Application cũ đã bị đóng nên không chạy lại được.
+    Mỗi lần thử lại phải dùng Application MỚI (cùng với event loop mới,
+    xem main()): Application cũ đã khởi tạo/tắt một nửa nên không dùng lại được.
     """
     app = Application.builder().token(get_token()).post_init(post_init).build()
     register_handlers(app)
@@ -115,6 +116,11 @@ def main():
     attempt = 0
     while True:
         handlers.START_TIME = time.time()
+        # run_polling() đóng event loop của thread khi thoát (close_loop=True
+        # mặc định), nên lần thử lại phải có loop MỚI, nếu không sẽ gặp
+        # "RuntimeError: Event loop is closed". Đặt loop rõ ràng cũng tránh
+        # DeprecationWarning của asyncio.get_event_loop() trên Python 3.12+.
+        asyncio.set_event_loop(asyncio.new_event_loop())
         try:
             app.run_polling(
                 # Token sai/hết hạn phải fail ngay thay vì retry vô hạn.
