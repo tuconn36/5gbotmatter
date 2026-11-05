@@ -20,7 +20,7 @@ from telegram import LinkPreviewOptions
 from config import BASE_DIR
 
 IMAGES_DIR = os.path.join(BASE_DIR, "images")
-LINKS_FILE = os.path.join(BASE_DIR, "img.txt")
+LINKS_FILE = os.path.join(BASE_DIR, "image_links.txt")
 EXTENSIONS = ("png", "jpg", "jpeg")
 
 # Nút quay lại / lệnh khác tên nhưng dùng chung ảnh với trang gốc.
@@ -29,6 +29,7 @@ ALIASES = {
     "menu": "home",
     "help": "huongdan",
     "hdsd": "huongdan",
+    "vpn": "sni",
     "back_gonen": "gonen",
     "package_back": "gonen",
     "back_viettel": "net_viettel",
