@@ -10,13 +10,14 @@ from telegram.ext import ContextTypes
 
 import admin as admin_module
 from config import is_admin
+from images import preview_options
 from matching import normalize, pick_page
 from keyboards import (
-    app_keyboard,
     back_keyboard,
     device_keyboard,
     goinen_keyboard,
     help_keyboard,
+    step_keyboard,
     main_keyboard,
     mobi_goi_keyboard,
     package_back_keyboard,
@@ -25,7 +26,6 @@ from keyboards import (
     viettel_goi_keyboard,
 )
 from texts import (
-    APP_TEXTS,
     DEVICE_TEXTS,
     FALLBACK_TEXT,
     GOI_NEN_TEXT,
@@ -37,6 +37,7 @@ from texts import (
     PAGES,
     VIETTEL_TEXT,
     VINA_TEXT,
+    STEP_TEXTS,
     ping_text,
     restart_failed_text,
     restart_not_allowed_text,
@@ -86,8 +87,8 @@ def resolve_view(key):
         return text, keyboard()
     if key in DEVICE_TEXTS:
         return DEVICE_TEXTS[key], device_keyboard(key)
-    if key in APP_TEXTS:
-        return APP_TEXTS[key], app_keyboard(key)
+    if key in STEP_TEXTS:
+        return STEP_TEXTS[key], step_keyboard(key)
     if key in PACKAGE_TEXTS:
         back_to = PACKAGE_NETWORK.get(key, "gonen")
         return PACKAGE_TEXTS[key], package_back_keyboard(back_to)
@@ -105,7 +106,12 @@ async def _reply_view(update: Update, key: str):
     if not message or not view:
         return
     text, keyboard = view
-    await message.reply_text(text, reply_markup=keyboard, parse_mode=PARSE_MODE)
+    await message.reply_text(
+        text,
+        reply_markup=keyboard,
+        parse_mode=PARSE_MODE,
+        link_preview_options=preview_options(key),
+    )
 
 
 # ==========================================
@@ -201,6 +207,7 @@ async def safe_edit(
     query: CallbackQuery,
     text: str,
     reply_markup: InlineKeyboardMarkup | None = None,
+    link_preview_options=None,
 ):
     """Sửa message, bỏ qua lỗi 'Message is not modified' khi bấm lại cùng nút."""
     try:
@@ -208,6 +215,7 @@ async def safe_edit(
             text,
             reply_markup=reply_markup,
             parse_mode=PARSE_MODE,
+            link_preview_options=link_preview_options,
         )
     except BadRequest as error:
         raw = getattr(error, "message", None) or str(error)
@@ -224,14 +232,20 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if not query:
         return
 
-    view = resolve_view(query.data or "")
+    key = query.data or ""
+    view = resolve_view(key)
     if view is None:
         await query.answer("⚠️ Chức năng này chưa được cấu hình.", show_alert=True)
         return
 
     await query.answer()
     text, keyboard = view
-    await safe_edit(query, text, reply_markup=keyboard)
+    await safe_edit(
+        query,
+        text,
+        reply_markup=keyboard,
+        link_preview_options=preview_options(key),
+    )
 
 
 # ==========================================
