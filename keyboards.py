@@ -7,7 +7,7 @@ Nhãn nút dùng emoji + chữ viết tắt để nhìn gọn trên màn hình h
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 
 from config import ADMIN_URL, WEBSITE
-from texts import APP_DEVICE, APP_GUIDES, DEVICE_APPS
+from texts import APP_GUIDES, DEVICE_APPS, STEP_INFO
 
 
 def main_keyboard():
@@ -59,8 +59,8 @@ def viettel_goi_keyboard():
     """Các gói Viettel."""
     return InlineKeyboardMarkup([
         [
-            InlineKeyboardButton("📆 Tuần T15KN", callback_data="pkg_viettel_t15kn"),
             InlineKeyboardButton("🎵 TikTok 50K", callback_data="pkg_viettel_tiktok"),
+            InlineKeyboardButton("📆 Tuần T15KN", callback_data="pkg_viettel_t15kn"),
             InlineKeyboardButton("💪 Gói MXH100", callback_data="pkg_viettel_mxh100"),
         ],
         [
@@ -141,7 +141,7 @@ def device_keyboard(device):
     rows = [
         [InlineKeyboardButton(
             f"📲 {APP_GUIDES[app_id]['name']}",
-            callback_data=f"app_{app_id}",
+            callback_data=f"step_{app_id}_1",
         )]
         for app_id in DEVICE_APPS[device]["apps"]
     ]
@@ -149,13 +149,21 @@ def device_keyboard(device):
     return InlineKeyboardMarkup(rows)
 
 
-def app_keyboard(app_key):
-    """Nút dưới trang hướng dẫn một app."""
-    return InlineKeyboardMarkup([
-        [
-            InlineKeyboardButton("🔙 Chọn app khác", callback_data=APP_DEVICE[app_key]),
-        ],
-        [
-            InlineKeyboardButton("🏠 Menu chính", callback_data="home"),
-        ],
-    ])
+def step_keyboard(key):
+    """Nút điều hướng cho một bước: ◀ Bước trước / Bước tiếp ▶."""
+    app_id, number, total, device = STEP_INFO[key]
+    if number > 1:
+        back = InlineKeyboardButton(
+            "◀ Bước trước", callback_data=f"step_{app_id}_{number - 1}"
+        )
+    else:
+        back = InlineKeyboardButton("🔙 Chọn app khác", callback_data=device)
+    home = InlineKeyboardButton("🏠 Menu chính", callback_data="home")
+
+    if number < total:
+        nxt = InlineKeyboardButton(
+            "Bước tiếp ▶", callback_data=f"step_{app_id}_{number + 1}"
+        )
+        return InlineKeyboardMarkup([[back, nxt], [home]])
+
+    return InlineKeyboardMarkup([[back], [home]])
