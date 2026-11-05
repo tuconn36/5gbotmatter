@@ -92,6 +92,7 @@ MAIN_TEXT = "\n\n".join([
     ]),
     section("GÓI CƯỚC &amp; DỊCH VỤ") + "\n" + card([
         "📶 <b>Gói nền 4G/5G</b> — bảng giá theo Viettel, VinaPhone, MobiFone",
+        "🛡️ <b>Dịch vụ VPN</b> — ẩn IP, mở khóa nội dung",
         "🔐 <b>Thuê ID Shadowrocket</b> — hỗ trợ tải ứng dụng",
     ]),
     "💬 Cần hỗ trợ? Bấm nút <b>Liên hệ hỗ trợ</b> bên dưới.",
@@ -109,12 +110,13 @@ HELP_TEXT = "\n\n".join([
     ]),
     section("CÁCH 2 — GÕ TỪ KHÓA") + "\n" + card([
         "Gõ <code>iphone</code>, <code>android</code>, <code>windows</code>,",
-        "<code>gói nền</code>, <code>thuê id</code>, <code>hỗ trợ</code>…",
+        "<code>gói nền</code>, <code>vpn</code>, <code>thuê id</code>, <code>hỗ trợ</code>…",
         "Bot sẽ tự động trả lời đúng trang.",
     ]),
     section("LỆNH NHANH") + "\n" + card([
-        "<code>/start</code> · <code>/menu</code> · <code>/huongdan</code> · "
-        "<code>/id</code> · <code>/ping</code>",
+        "<code>/start</code> · <code>/goi</code> · <code>/vpn</code> · "
+        "<code>/thueid</code> · <code>/hotro</code>",
+        "<code>/huongdan</code> · <code>/id</code> · <code>/ping</code>",
     ]),
     "💬 Cần trợ giúp? Bấm nút <b>Liên hệ hỗ trợ</b>.",
 ])
@@ -153,36 +155,29 @@ PAGES = {
         "🤖",
         "Android",
         [
-            "① Mở <b>Telegram</b> → chọn <b>Gói nền</b> → đúng nhà mạng",
-            "② Đăng ký gói (hoặc soạn mã đăng ký gửi đầu số)",
-            "③ Tải file cấu hình mà bot gửi cho bạn",
-            "④ Mở <b>Shadowrocket</b> → <b>＋</b> → <b>Import from File</b>",
-            "⑤ Chọn file vừa tải → bật công tắc kết nối",
+            "① Cài <b>v2rayNG</b> từ <b>Google Play</b>",
+            "② Mở app → bấm <b>＋</b> → chọn nhập cấu hình từ <b>file</b> "
+            "(hoặc <b>clipboard</b>) mà bot đã gửi",
+            "③ Chọn cấu hình vừa nhập → bấm nút <b>▶</b> để kết nối",
         ],
     ),
     "ios": _device_page(
         "🍎",
         "iOS",
         [
-            "① Mở <b>Telegram</b> → chọn <b>Gói nền</b> → đúng nhà mạng",
-            "② Đăng ký gói (hoặc soạn mã đăng ký gửi đầu số)",
-            "③ Tải file cấu hình mà bot gửi cho bạn",
-            "④ Tải <b>Shadowrocket</b> từ <b>App Store</b> (bản trả phí)",
-            "⑤ Mở app → <b>＋</b> → <b>Import from File</b> → chọn file",
-            "⑥ Bật công tắc kết nối → cho phép thêm cấu hình VPN proxy",
+            "① Tải <b>Shadowrocket</b> từ <b>App Store</b> (bản trả phí)",
+            "② Mở app → <b>＋</b> → <b>Import from File</b> → chọn file cấu hình",
+            "③ Bật công tắc kết nối → cho phép thêm cấu hình VPN proxy",
         ],
     ),
     "windows": _device_page(
         "🖥️",
         "Windows",
         [
-            "① Mở <b>Telegram</b> → chọn <b>Gói nền</b> → đúng nhà mạng",
-            "② Đăng ký gói (hoặc soạn mã đăng ký gửi đầu số)",
-            "③ Tải file cấu hình mà bot gửi cho bạn",
-            "④ Cài <b>v2rayN</b> (Windows) rồi mở lên",
-            "⑤ Menu <b>Servers</b> → <b>Import server from file</b> → chọn file",
-            "⑥ Bấm <b>Enter</b> để chọn server, rồi <b>Set as system proxy</b>",
-            "⑦ Tắt kết nối: bỏ chọn <b>System proxy</b> trong v2rayN",
+            "① Cài <b>v2rayN</b> rồi mở lên",
+            "② Menu <b>Servers</b> → <b>Import server from file</b> → chọn file cấu hình",
+            "③ Bấm <b>Enter</b> để chọn server, rồi <b>Set as system proxy</b>",
+            "④ Tắt kết nối: bỏ chọn <b>System proxy</b> trong v2rayN",
         ],
     ),
     "gonen": "\n\n".join([
@@ -228,7 +223,7 @@ PAGES = {
             "🎬 <b>Mở khóa nội dung</b> — xem nội dung bị chặn theo vùng",
         ]),
         section("HƯỚNG DẪN CÀI ĐẶT") + "\n" + card([
-            "① Cài <b>Shadowrocket</b> (iOS/macOS) hoặc <b>v2rayN</b> (Windows)",
+            "① Cài <b>Shadowrocket</b> (iOS), <b>v2rayNG</b> (Android) hoặc <b>v2rayN</b> (Windows)",
             "② Nhập file cấu hình mà bot gửi cho bạn qua <b>Import</b>",
             "③ Bật công tắc kết nối và chọn server phù hợp",
         ]),
@@ -268,7 +263,7 @@ NETWORK_PACKAGES = {
             "icon": "🚀",
             "title": "TK30",
             "price": "30.000đ/tháng",
-            "tagline": "Rẻ nhất — không giới hạn dung lượng",
+            "tagline": "Giá mềm — không giới hạn dung lượng",
             "bullets": [
                 "Truy cập không giới hạn, không lo cháy data",
                 "Tốc độ ổn định, được ưu tiên mạng",
@@ -337,9 +332,9 @@ NETWORK_PACKAGES = {
 }
 
 NETWORK_HEADERS = {
-    "vina": ("🔵", "Gói nền Vinaphone"),
+    "vina": ("🔵", "Gói nền VinaPhone"),
     "viettel": ("🔴", "Gói nền Viettel"),
-    "mobi": ("🟢", "Gói nền Mobifone"),
+    "mobi": ("🟢", "Gói nền MobiFone"),
 }
 
 
@@ -462,7 +457,7 @@ def restart_requested_text():
         "<i>Lệnh đã được gửi tới máy chủ</i>",
         section("TRẠNG THÁI") + "\n" + card([
             "⏳ Đang tạo phiên chạy mới trên GitHub Actions…",
-            "⏱️ Bot sẽ trở lại sau vài chục giây.",
+            "⏱️ Bot sẽ trở lại sau khoảng 1–2 phút.",
         ]),
         section("LƯU Ý") + "\n" + card([
             "🔕 Bot sẽ ngừng phản hồi trong lúc khởi động lại.",
@@ -480,8 +475,8 @@ def restart_failed_text(reason):
             f"🧾 <code>{escape(reason)}</code>",
         ]),
         section("CÁCH XỬ LÝ") + "\n" + card([
-            "🌐 Vào GitHub → Actions → chạy workflow <code>bot.yml</code>.",
-            "🔁 Hoặc nhấn nút <b>Run workflow</b> trên tab Actions.",
+            "🌐 Vào GitHub → tab <b>Actions</b> → <b>Telegram Bot</b>.",
+            "🔁 Bấm <b>Run workflow</b> để chạy lại bot.",
         ]),
     ])
 
