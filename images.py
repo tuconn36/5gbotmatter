@@ -1,22 +1,26 @@
 """Chèn ảnh minh hoạ vào các trang của bot.
 
-Cách hoạt động: đặt ảnh vào thư mục images/ với tên trùng mã trang
-(vd images/android_v2rayng_1.png = ảnh bước 1 của v2rayNG). Bot sẽ gắn ảnh đó lên ĐẦU tin nhắn
-dưới dạng link preview của Telegram, nên vẫn dùng được với nút bấm
-(không phải gửi lại tin mới). Trang nào chưa có ảnh thì hiện như cũ.
+Ảnh được gắn lên ĐẦU tin nhắn dưới dạng link preview của Telegram, nên
+dùng được với nút bấm (không phải gửi lại tin mới). Trang nào chưa có ảnh
+thì hiện chữ như bình thường.
 
-Điều kiện: ảnh phải tải được qua một URL công khai.
-  - Chạy trên GitHub Actions (repo PUBLIC): tự dùng raw.githubusercontent.com.
-  - Chạy nơi khác: đặt biến IMAGE_BASE_URL, vd https://domain.com/images/
+Có 2 nguồn ảnh (ưu tiên từ trên xuống):
+  1. Link ảnh trực tiếp ghi trong file image_links.txt  (dễ nhất)
+       dạng mỗi dòng:  tên_ảnh = https://.../anh.png
+  2. File ảnh trong thư mục images/ (tên file = tên_ảnh, vd android_v2rayng_1.png)
+       - GitHub Actions (repo PUBLIC): tự dùng raw.githubusercontent.com
+       - Chạy nơi khác: đặt biến IMAGE_BASE_URL, vd https://domain.com/images/
 """
 
 import os
+from functools import lru_cache
 
 from telegram import LinkPreviewOptions
 
 from config import BASE_DIR
 
 IMAGES_DIR = os.path.join(BASE_DIR, "images")
+LINKS_FILE = os.path.join(BASE_DIR, "image_links.txt")
 EXTENSIONS = ("png", "jpg", "jpeg")
 
 # Nút quay lại / lệnh khác tên nhưng dùng chung ảnh với trang gốc.
@@ -35,6 +39,37 @@ ALIASES = {
 _NO_PREVIEW = LinkPreviewOptions(is_disabled=True)
 
 
+def canonical(key):
+    """Đổi mã trang/callback thành tên ảnh.
+
+    "step_android_v2rayng_2" -> "android_v2rayng_2"
+    "menu"                   -> "home"
+    """
+    key = ALIASES.get(key, key)
+    if key.startswith("step_"):
+        key = key[len("step_"):]
+    return key
+
+
+@lru_cache(maxsize=1)
+def load_links():
+    """Đọc image_links.txt -> {tên_ảnh: url}. Dòng sai/để trống bị bỏ qua."""
+    links = {}
+    try:
+        with open(LINKS_FILE, encoding="utf-8-sig") as f:
+            for raw in f:
+                line = raw.strip()
+                if not line or line.startswith("#") or "=" not in line:
+                    continue
+                name, _, url = line.partition("=")
+                name, url = name.strip(), url.strip()
+                if name and url.lower().startswith(("http://", "https://")):
+                    links[name] = url
+    except OSError:
+        pass
+    return links
+
+
 def _base_url():
     """URL thư mục chứa ảnh (kết thúc bằng '/'), hoặc '' nếu không xác định."""
     url = os.environ.get("IMAGE_BASE_URL", "").strip()
@@ -48,15 +83,23 @@ def _base_url():
 
 
 def find_image(key):
-    """Trả về tên file ảnh của trang `key` (nếu có trong images/)."""
-    key = ALIASES.get(key, key)
-    if key.startswith("step_"):
-        key = key[len("step_"):]  # ảnh của bước: <mã app>_<số bước>.png
+    """Trả về tên file ảnh của trang `key` trong images/ (nếu có)."""
+    name = canonical(key)
     for ext in EXTENSIONS:
-        name = f"{key}.{ext}"
-        if os.path.isfile(os.path.join(IMAGES_DIR, name)):
-            return name
+        filename = f"{name}.{ext}"
+        if os.path.isfile(os.path.join(IMAGES_DIR, filename)):
+            return filename
     return None
+
+
+def image_url(key):
+    """URL ảnh của trang `key`, hoặc None nếu chưa có."""
+    url = load_links().get(canonical(key))
+    if url:
+        return url
+    base = _base_url()
+    filename = find_image(key) if base else None
+    return base + filename if filename else None
 
 
 def preview_options(key):
@@ -66,12 +109,7 @@ def preview_options(key):
     Không có ảnh -> tắt hẳn link preview (tránh Telegram tự xem trước
     link website trong nội dung).
     """
-    base = _base_url()
-    name = find_image(key) if base else None
-    if not name:
+    url = image_url(key)
+    if not url:
         return _NO_PREVIEW
-    return LinkPreviewOptions(
-        url=base + name,
-        show_above_text=True,
-        prefer_large_media=True,
-    )
+    return LinkPreviewOptions(url=url, show_above_text=True, prefer_large_media=True)
