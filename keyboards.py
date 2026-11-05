@@ -167,3 +167,20 @@ def step_keyboard(key):
         return InlineKeyboardMarkup([[back, nxt], [home]])
 
     return InlineKeyboardMarkup([[back], [home]])
+
+
+def sni_keyboard():
+    """Chọn loại SIM cho Đổi SNI."""
+    return InlineKeyboardMarkup([
+        [InlineKeyboardButton("🚫 Không nền (Vina 0đ)", callback_data="sni_khongnen")],
+        [InlineKeyboardButton("✅ Có nền (các SIM còn lại)", callback_data="sni_conen")],
+        [InlineKeyboardButton("🏠 Menu chính", callback_data="home")],
+    ])
+
+
+def sni_option_keyboard():
+    """Nút dưới trang hướng dẫn Đổi SNI (không nền / có nền)."""
+    return InlineKeyboardMarkup([
+        [InlineKeyboardButton("🔙 Chọn loại SIM", callback_data="sni")],
+        [InlineKeyboardButton("🏠 Menu chính", callback_data="home")],
+    ])
