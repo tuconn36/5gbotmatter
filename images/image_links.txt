@@ -3,48 +3,63 @@
 android_v2rayng_1 =
 android_v2rayng_2 =
 android_v2rayng_3 =
+
 android_happ_1 =
 android_happ_2 =
 android_happ_3 =
-ios_shadowrocket_1 =
-ios_shadowrocket_2 =
-ios_shadowrocket_3 =
-ios_shadowrocket_4 =
-ios_v2box_1 =
-ios_v2box_2 =
-ios_v2box_3 =
+
+ios_shadowrocket_1 = https://cdn.phototourl.com/member/2026-11-06-d56e7729-067c-4e88-9c77-faa59e8196b0.jpg
+ios_shadowrocket_2 = https://cdn.phototourl.com/member/2026-11-06-e05ab241-3166-4e1a-8578-f3ee1ba4a90e.jpg
+ios_shadowrocket_3 = https://cdn.phototourl.com/member/2026-11-06-3fa68e9b-f32d-41d0-a0ab-ce9abe21ac76.jpg
+ios_shadowrocket_4 = https://cdn.phototourl.com/member/2026-11-06-ec3d7bb2-682a-4e7e-984f-8c39f49c4441.jpg
+
+ios_v2box_1 = https://cdn.phototourl.com/member/2026-11-06-c6ac8ab9-bba5-440b-a240-584468ffad11.jpg
+ios_v2box_2 = https://cdn.phototourl.com/member/2026-11-06-7873ffad-12ad-4846-bc39-479a81d8b17e.jpg
+ios_v2box_3 = https://cdn.phototourl.com/member/2026-11-06-df87dffe-2805-4629-9d36-85236fbc0593.jpg
+ios_v2box_4 = https://cdn.phototourl.com/member/2026-11-06-408b9bce-54da-48b5-9d17-b19c628b8401.jpg
+
 ios_happ_1 =
 ios_happ_2 =
 ios_happ_3 =
+
 windows_v2rayn_1 =
 windows_v2rayn_2 =
 windows_v2rayn_3 =
+
 windows_happ_1 =
 windows_happ_2 =
 windows_happ_3 =
 
 # ===== ẢNH CÁC TRANG KHÁC =====
+
 home =
 android =
 ios =
 windows =
 gonen =
+
 net_viettel =
 net_vina =
 net_mobi =
+
 pkg_vina_0 =
 pkg_vina_30 =
+
 pkg_viettel_tiktok =
 pkg_viettel_t15kn =
 pkg_viettel_mxh100 =
+
 pkg_mobi_tiktok =
+
 sni =
-sni_khongnen_1 =
-sni_khongnen_2 =
-sni_khongnen_3 =
-sni_conen_1 =
-sni_conen_2 =
-sni_conen_3 =
+sni_khongnen_1 = https://cdn.phototourl.com/member/2026-11-06-d56e7729-067c-4e88-9c77-faa59e8196b0.jpg
+sni_khongnen_2 = https://cdn.phototourl.com/member/2026-11-06-ffd848b0-d588-49fa-aea4-fcf80191d0cf.jpg
+sni_khongnen_3 = https://cdn.phototourl.com/member/2026-11-06-b2c18b53-e332-40cf-b90d-e1f9d6db800f.jpg
+
+sni_conen_1 = https://cdn.phototourl.com/member/2026-11-06-d56e7729-067c-4e88-9c77-faa59e8196b0.jpg
+sni_conen_2 = https://cdn.phototourl.com/member/2026-11-06-ffd848b0-d588-49fa-aea4-fcf80191d0cf.jpg
+sni_conen_3 = https://cdn.phototourl.com/member/2026-11-06-802f9981-165c-4757-98b0-caffc3e660f7.jpg
+
 thueid =
 hotro =
 huongdan =
