@@ -1,17 +1,11 @@
-# TRANG CHÍNH
-home =
 
-# ANDROID
-android =
+# ===== ẢNH TỪNG BƯỚC HƯỚNG DẪN =====
 android_v2rayng_1 =
 android_v2rayng_2 =
 android_v2rayng_3 =
 android_happ_1 =
 android_happ_2 =
 android_happ_3 =
-
-# IOS
-ios =
 ios_shadowrocket_1 =
 ios_shadowrocket_2 =
 ios_shadowrocket_3 =
@@ -22,9 +16,6 @@ ios_v2box_3 =
 ios_happ_1 =
 ios_happ_2 =
 ios_happ_3 =
-
-# WINDOWS
-windows =
 windows_v2rayn_1 =
 windows_v2rayn_2 =
 windows_v2rayn_3 =
@@ -32,24 +23,28 @@ windows_happ_1 =
 windows_happ_2 =
 windows_happ_3 =
 
-# GÓI NỀN
+# ===== ẢNH CÁC TRANG KHÁC =====
+home =
+android =
+ios =
+windows =
 gonen =
 net_viettel =
+net_vina =
+net_mobi =
+pkg_vina_0 =
+pkg_vina_30 =
 pkg_viettel_tiktok =
 pkg_viettel_t15kn =
 pkg_viettel_mxh100 =
-net_vina =
-pkg_vina_0 =
-pkg_vina_30 =
-net_mobi =
 pkg_mobi_tiktok =
-
-# ĐỔI SNI
 sni =
-sni_khongnen = https://cdn.phototourl.com/member/2026-11-05-e6bd0ba2-4eae-4e14-b484-3ca75f218a78.jpg
-sni_conen =
-
-# KHÁC
+sni_khongnen_1 =
+sni_khongnen_2 =
+sni_khongnen_3 =
+sni_conen_1 =
+sni_conen_2 =
+sni_conen_3 =
 thueid =
 hotro =
 huongdan =
