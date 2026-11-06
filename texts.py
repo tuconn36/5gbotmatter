@@ -1,4 +1,19 @@
-"""Nội dung hiển thị của bot 5G MATTER."""
+"""Nội dung hiển thị của bot 5G MATTER.
+
+Tất cả nội dung dùng HTML parse mode của Telegram.
+Ký tự đặc biệt phải escape: & -> &amp; , < -> &lt; , > -> &gt;
+
+NGUYÊN TẮC THIẾT KẾ GIAO DIỆN
+------------------------------
+1. Mọi khối "thẻ" dùng <blockquote>. Đây là khung gạch dọc native của
+   Telegram: cạnh trái luôn thẳng hàng ở mọi client (kể cả khi client
+   dùng font tỉ lệ), khác với khung kín ╭─╮ bị lệch cạnh phải.
+2. Tiêu đề dùng <b>, mô tả phụ dùng <i>, giá / mã đăng ký dùng <code>
+   để nổi bật như một "chip" nhỏ.
+3. Nhãn mục dùng "▌ <b>TIÊU ĐỀ</b>" tạo cảm giác tab mở đầu khối.
+4. Không dùng quá nhiều ký tự trang trí: khoảng cách trắng + nhãn mục
+   đã đủ để tách khối, giữ tin nhắn gọn và dễ đọc trên màn hình nhỏ.
+"""
 
 # ==========================================
 # CÔNG CỤ ĐỊNH DẠNG
@@ -290,18 +305,60 @@ PAGES = {
             "✅ <b>Có nền</b> — tất cả các SIM còn lại",
         ]),
     ]),
-    "sni_khongnen": "\n\n".join([
-        "🚫 <b>ĐỔI SNI · KHÔNG NỀN</b>\n"
-        "<i>Dành cho SIM VinaPhone 0đ</i>",
-        card(["📸 Làm theo ảnh hướng dẫn."]),
-    ]),
-    "sni_conen": "\n\n".join([
-        "✅ <b>ĐỔI SNI · CÓ NỀN</b>\n"
-        "<i>Dành cho tất cả các SIM còn lại (có gói nền)</i>",
-        card(["📸 Làm theo ảnh hướng dẫn."]),
-    ]),
     "huongdan": HELP_TEXT,
 }
+
+# ==========================================
+# ĐỔI SNI - 3 BƯỚC CHO MỖI LOẠI SIM
+# ==========================================
+# Sửa nội dung từng bước ở đây. Mỗi bước: (tiêu đề, nội dung chi tiết).
+# Ảnh minh hoạ của bước dùng tên "<loại>_<số bước>" trong image_links.txt,
+# vd sni_khongnen_1, sni_conen_3.
+_SNI_PHOTO = "📸 Làm theo ảnh hướng dẫn."
+
+SNI_GUIDES = {
+    "sni_khongnen": {
+        "steps": [
+            ("Mở ứng dụng", _SNI_PHOTO),
+            ("Đổi SNI", _SNI_PHOTO),
+            ("Lưu và kết nối", _SNI_PHOTO),
+        ],
+    },
+    "sni_conen": {
+        "steps": [
+            ("Mở ứng dụng", _SNI_PHOTO),
+            ("Đổi SNI", _SNI_PHOTO),
+            ("Lưu và kết nối", _SNI_PHOTO),
+        ],
+    },
+}
+
+
+def render_sni_step(option, number):
+    """Một bước trong hướng dẫn Đổi SNI (có thanh tiến độ)."""
+    guide = SNI_GUIDES[option]
+    total = len(guide["steps"])
+    title, detail = guide["steps"][number - 1]
+    progress = "▰" * number + "▱" * (total - number)
+    blocks = [
+        f"<b>Bước {number}/{total}</b> · {title}\n{progress}",
+        card([detail]),
+    ]
+    if number == total:
+        blocks.append("🎉 Xong rồi, chúc bạn dùng vui vẻ!")
+    return "\n\n".join(blocks)
+
+
+# Trang từng bước: callback_data = "sni_khongnen_1" ... "sni_conen_3".
+SNI_STEP_TEXTS = {}
+# "sni_..._<n>" -> (loại, số bước, tổng số bước) để dựng nút điều hướng.
+SNI_STEP_INFO = {}
+for _option, _guide in SNI_GUIDES.items():
+    _total = len(_guide["steps"])
+    for _number in range(1, _total + 1):
+        _key = f"{_option}_{_number}"
+        SNI_STEP_TEXTS[_key] = render_sni_step(_option, _number)
+        SNI_STEP_INFO[_key] = (_option, _number, _total)
 
 GOI_NEN_TEXT = PAGES["gonen"]
 
