@@ -1,13 +1,4 @@
-"""Chức năng quản trị: khởi động lại bot trên GitHub Actions.
-
-Cách hoạt động của /restart:
-  1. Gọi GitHub API để dispatch một run MỚI của workflow bot.yml.
-  2. Huỷ run HIỆN TẠI (GITHUB_RUN_ID) để nhường chỗ cho run mới.
-
-Yêu cầu trong workflow:
-  - permissions: actions: write
-  - env: GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-"""
+"""Chức năng quản trị: khởi động lại bot."""
 
 import asyncio
 import logging
