@@ -7,7 +7,7 @@ Nhãn nút dùng emoji + chữ viết tắt để nhìn gọn trên màn hình h
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 
 from config import ADMIN_URL, WEBSITE
-from texts import APP_GUIDES, DEVICE_APPS, STEP_INFO
+from texts import APP_GUIDES, DEVICE_APPS, SNI_STEP_INFO, STEP_INFO
 
 
 def main_keyboard():
@@ -149,6 +149,14 @@ def device_keyboard(device):
     return InlineKeyboardMarkup(rows)
 
 
+# Nút kết thúc hướng dẫn: bot sẽ làm tin nhắn "tan biến" (xem handlers.py).
+DONE_CALLBACK = "done"
+
+
+def _done_button():
+    return InlineKeyboardButton("✅ Xong", callback_data=DONE_CALLBACK)
+
+
 def step_keyboard(key):
     """Nút điều hướng cho một bước: ◀ Bước trước / Bước tiếp ▶."""
     app_id, number, total, device = STEP_INFO[key]
@@ -166,21 +174,35 @@ def step_keyboard(key):
         )
         return InlineKeyboardMarkup([[back, nxt], [home]])
 
-    return InlineKeyboardMarkup([[back], [home]])
+    # Bước cuối: nút Xong
+    return InlineKeyboardMarkup([[_done_button()], [back, home]])
 
 
 def sni_keyboard():
     """Chọn loại SIM cho Đổi SNI."""
     return InlineKeyboardMarkup([
-        [InlineKeyboardButton("🚫 Không nền (Vina 0đ)", callback_data="sni_khongnen")],
-        [InlineKeyboardButton("✅ Có nền (các SIM còn lại)", callback_data="sni_conen")],
+        [InlineKeyboardButton("🚫 Không nền (Vina 0đ)", callback_data="sni_khongnen_1")],
+        [InlineKeyboardButton("✅ Có nền (các SIM còn lại)", callback_data="sni_conen_1")],
         [InlineKeyboardButton("🏠 Menu chính", callback_data="home")],
     ])
 
 
-def sni_option_keyboard():
-    """Nút dưới trang hướng dẫn Đổi SNI (không nền / có nền)."""
-    return InlineKeyboardMarkup([
-        [InlineKeyboardButton("🔙 Chọn loại SIM", callback_data="sni")],
-        [InlineKeyboardButton("🏠 Menu chính", callback_data="home")],
-    ])
+def sni_step_keyboard(key):
+    """Nút điều hướng cho một bước Đổi SNI: ◀ Bước trước / Bước tiếp ▶."""
+    option, number, total = SNI_STEP_INFO[key]
+    if number > 1:
+        back = InlineKeyboardButton(
+            "◀ Bước trước", callback_data=f"{option}_{number - 1}"
+        )
+    else:
+        back = InlineKeyboardButton("🔙 Chọn loại SIM", callback_data="sni")
+    home = InlineKeyboardButton("🏠 Menu chính", callback_data="home")
+
+    if number < total:
+        nxt = InlineKeyboardButton(
+            "Bước tiếp ▶", callback_data=f"{option}_{number + 1}"
+        )
+        return InlineKeyboardMarkup([[back, nxt], [home]])
+
+    # Bước cuối: nút Xong
+    return InlineKeyboardMarkup([[_done_button()], [back, home]])
