@@ -319,16 +319,16 @@ _SNI_PHOTO = "📸 Làm theo ảnh hướng dẫn."
 SNI_GUIDES = {
     "sni_khongnen": {
         "steps": [
-            ("Mở ứng dụng", _SNI_PHOTO),
+            ("Mở web 5gmatter.site", _SNI_PHOTO),
             ("Đổi SNI", _SNI_PHOTO),
-            ("Lưu và kết nối", _SNI_PHOTO),
+            ("Bấm và load lại", _SNI_PHOTO),
         ],
     },
     "sni_conen": {
         "steps": [
-            ("Mở ứng dụng", _SNI_PHOTO),
+            ("Mở web 5gmatter.site", _SNI_PHOTO),
             ("Đổi SNI", _SNI_PHOTO),
-            ("Lưu và kết nối", _SNI_PHOTO),
+            ("Bấm và load lại", _SNI_PHOTO),
         ],
     },
 }
@@ -398,20 +398,7 @@ NETWORK_PACKAGES = {
         },
     ],
     "viettel": [
-        {
-            "key": "pkg_viettel_tiktok",
-            "icon": "🎵",
-            "title": "TikTok 50K",
-            "price": "50.000đ/tháng",
-            "tagline": "Tiết kiệm — 50K là đủ dùng cả tháng",
-            "bullets": [
-                "50GB data dành riêng cho TikTok",
-                "Nạp đủ 50K là tự gia hạn, không cần thao tác mỗi tháng",
-            ],
-            "note": "Hợp người xem TikTok nhiều, muốn tiết kiệm",
-            "action": "Soạn <code>T50k</code> gửi <code>191</code>",
-        },
-        {
+       {
             "key": "pkg_viettel_t15kn",
             "icon": "📆",
             "title": "Gói tuần T15KN",
@@ -424,6 +411,19 @@ NETWORK_PACKAGES = {
             ],
             "note": "Hợp dùng vừa phải, muốn linh hoạt theo tuần",
             "action": "Soạn <code>T15KN</code> gửi <code>191</code>",
+        },
+        {
+            "key": "pkg_viettel_tiktok",
+            "icon": "🎵",
+            "title": "TikTok 50K",
+            "price": "50.000đ/tháng",
+            "tagline": "Tiết kiệm — 50K là đủ dùng cả tháng",
+            "bullets": [
+                "50GB data dành riêng cho TikTok",
+                "Nạp đủ 50K là tự gia hạn, không cần thao tác mỗi tháng",
+            ],
+            "note": "Hợp người xem TikTok nhiều, muốn tiết kiệm",
+            "action": "Soạn <code>T50k</code> gửi <code>191</code>",
         },
         {
             "key": "pkg_viettel_mxh100",
@@ -531,8 +531,8 @@ PACKAGE_TEXTS = {
 # callback quay lại của từng gói -> nhà mạng tương ứng,
 # để nút "Quay lại" luôn đưa người dùng về đúng trang đang xem.
 PACKAGE_NETWORK = {
-    "pkg_viettel_tiktok": "net_viettel",
     "pkg_viettel_t15kn": "net_viettel",
+    "pkg_viettel_tiktok": "net_viettel",
     "pkg_viettel_mxh100": "net_viettel",
     "pkg_vina_0": "net_vina",
     "pkg_vina_30": "net_vina",
