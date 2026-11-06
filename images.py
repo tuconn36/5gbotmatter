@@ -1,4 +1,16 @@
-"""Chèn ảnh minh hoạ vào các trang của bot."""
+"""Chèn ảnh minh hoạ vào các trang của bot.
+
+Ảnh được gắn lên ĐẦU tin nhắn dưới dạng link preview của Telegram, nên
+dùng được với nút bấm (không phải gửi lại tin mới). Trang nào chưa có ảnh
+thì hiện chữ như bình thường.
+
+Có 2 nguồn ảnh (ưu tiên từ trên xuống):
+  1. Link ảnh trực tiếp ghi trong file image_links.txt  (dễ nhất)
+       dạng mỗi dòng:  tên_ảnh = https://.../anh.png
+  2. File ảnh trong thư mục images/ (tên file = tên_ảnh, vd android_v2rayng_1.png)
+       - GitHub Actions (repo PUBLIC): tự dùng raw.githubusercontent.com
+       - Chạy nơi khác: đặt biến IMAGE_BASE_URL, vd https://domain.com/images/
+"""
 
 import os
 from functools import lru_cache
@@ -22,6 +34,8 @@ ALIASES = {
     "help": "huongdan",
     "hdsd": "huongdan",
     "vpn": "sni",
+    "sni_khongnen": "sni_khongnen_1",
+    "sni_conen": "sni_conen_1",
     "back_gonen": "gonen",
     "package_back": "gonen",
     "back_viettel": "net_viettel",
