@@ -1,8 +1,4 @@
-"""Bàn phím inline của bot 5G MATTER.
-
-Bố cục gọn gàng, nút quay lại ở mọi cấp.
-Nhãn nút dùng emoji + chữ viết tắt để nhìn gọn trên màn hình hẹp.
-"""
+"""Bàn phím inline của bot 5G MATTER."""
 
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 
@@ -59,8 +55,8 @@ def viettel_goi_keyboard():
     """Các gói Viettel."""
     return InlineKeyboardMarkup([
         [
-            InlineKeyboardButton("🎵 TikTok 50K", callback_data="pkg_viettel_tiktok"),
             InlineKeyboardButton("📆 Tuần T15KN", callback_data="pkg_viettel_t15kn"),
+            InlineKeyboardButton("🎵 TikTok 50K", callback_data="pkg_viettel_tiktok"),
             InlineKeyboardButton("💪 Gói MXH100", callback_data="pkg_viettel_mxh100"),
         ],
         [
@@ -101,9 +97,6 @@ def package_back_keyboard(back_to="gonen"):
     (mặc định về danh sách nhà mạng)."""
     return InlineKeyboardMarkup([
         [
-            InlineKeyboardButton("🌐 Mở website 5G MATTER", url=WEBSITE),
-        ],
-        [
             InlineKeyboardButton("🔙 Quay lại", callback_data=back_to),
         ],
         [
@@ -126,9 +119,6 @@ def support_keyboard():
     return InlineKeyboardMarkup([
         [
             InlineKeyboardButton("💬 Chat quản trị viên", url=ADMIN_URL),
-        ],
-        [
-            InlineKeyboardButton("🌐 Mở website 5G MATTER", url=WEBSITE),
         ],
         [
             InlineKeyboardButton("🏠 Menu chính", callback_data="home"),
