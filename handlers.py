@@ -1,9 +1,11 @@
 """Xử lý command, callback query và trả lời tự động của bot 5G MATTER."""
 
+import asyncio
+import html
 import logging
 import time
 
-from telegram import CallbackQuery, InlineKeyboardMarkup, Update
+from telegram import CallbackQuery, InlineKeyboardMarkup, LinkPreviewOptions, Update
 from telegram.constants import ChatType, ParseMode
 from telegram.error import BadRequest
 from telegram.ext import ContextTypes
@@ -13,12 +15,13 @@ from config import is_admin
 from images import preview_options
 from matching import normalize, pick_page
 from keyboards import (
+    DONE_CALLBACK,
     back_keyboard,
     device_keyboard,
     goinen_keyboard,
     help_keyboard,
     sni_keyboard,
-    sni_option_keyboard,
+    sni_step_keyboard,
     step_keyboard,
     main_keyboard,
     mobi_goi_keyboard,
@@ -39,6 +42,7 @@ from texts import (
     PAGES,
     VIETTEL_TEXT,
     VINA_TEXT,
+    SNI_STEP_TEXTS,
     STEP_TEXTS,
     ping_text,
     restart_failed_text,
@@ -80,6 +84,8 @@ def resolve_view(key):
     """
     if key == "vpn":  # nút / lệnh cũ trong các tin nhắn đã gửi
         key = "sni"
+    if key in ("sni_khongnen", "sni_conen"):  # nút cũ -> bước 1
+        key += "_1"
     if key in _HOME_KEYS:
         return MAIN_TEXT, main_keyboard()
     if key in _HELP_KEYS:
@@ -98,8 +104,8 @@ def resolve_view(key):
         return PACKAGE_TEXTS[key], package_back_keyboard(back_to)
     if key == "sni":
         return PAGES["sni"], sni_keyboard()
-    if key in ("sni_khongnen", "sni_conen"):
-        return PAGES[key], sni_option_keyboard()
+    if key in SNI_STEP_TEXTS:
+        return SNI_STEP_TEXTS[key], sni_step_keyboard(key)
     if key == "hotro":
         return PAGES[key], support_keyboard()
     if key in PAGES:
@@ -237,6 +243,41 @@ async def safe_edit(
         raise
 
 
+# Thời gian hiển thị hiệu ứng tan biến trước khi xoá tin nhắn (giây).
+DISSOLVE_SECONDS = 1.3
+
+
+async def dissolve_message(query: CallbackQuery):
+    """Nút ✅ Xong: làm tin nhắn "tan biến" rồi xoá.
+
+    Telegram không có animation tuỳ ý, nhưng văn bản bọc trong spoiler sẽ
+    hiện hiệu ứng hạt bụi tan biến. Bot đổi cả tin nhắn sang dạng spoiler,
+    đợi một nhịp rồi xoá hẳn.
+    """
+    await query.answer("✅ Hoàn tất!")
+    message = query.message
+    plain = getattr(message, "text", None)
+    try:
+        if plain:
+            await query.edit_message_text(
+                f"<tg-spoiler>{html.escape(plain)}</tg-spoiler>",
+                parse_mode=PARSE_MODE,
+                reply_markup=None,
+                link_preview_options=LinkPreviewOptions(is_disabled=True),
+            )
+            await asyncio.sleep(DISSOLVE_SECONDS)
+        await message.delete()
+    except BadRequest as error:
+        # Không xoá được (tin quá cũ, đã bị xoá, bấm đúp...) -> để lại lời chốt.
+        logger.info("Không xoá được tin nhắn sau khi Xong: %s", error)
+        try:
+            await query.edit_message_text(
+                "✅ Hoàn tất!", reply_markup=None, link_preview_options=LinkPreviewOptions(is_disabled=True)
+            )
+        except BadRequest:
+            pass
+
+
 async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
     """Điều hướng theo callback_data của nút bấm."""
     query = update.callback_query
@@ -244,6 +285,9 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         return
 
     key = query.data or ""
+    if key == DONE_CALLBACK:
+        await dissolve_message(query)
+        return
     view = resolve_view(key)
     if view is None:
         await query.answer("⚠️ Chức năng này chưa được cấu hình.", show_alert=True)
