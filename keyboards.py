@@ -3,27 +3,28 @@
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 
 from config import ADMIN_URL, WEBSITE
+from icons import plain_button
 from texts import APP_GUIDES, DEVICE_APPS, SNI_STEP_INFO, STEP_INFO
 
 
 def main_keyboard():
-    """Menu chính."""
+    """Menu chính (không có emoji thường; icon động lấy từ icons.txt)."""
     return InlineKeyboardMarkup([
         [
-            InlineKeyboardButton("🤖 Android", callback_data="android"),
-            InlineKeyboardButton("🍎 iOS", callback_data="ios"),
-            InlineKeyboardButton("🖥️ Windows", callback_data="windows"),
+            plain_button("android", "Android", callback_data="android"),
+            plain_button("ios", "iOS", callback_data="ios"),
+            plain_button("windows", "Windows", callback_data="windows"),
         ],
         [
-            InlineKeyboardButton("📶 Gói nền 4G/5G", callback_data="gonen"),
+            plain_button("gonen", "Gói nền 4G/5G", callback_data="gonen"),
         ],
         [
-            InlineKeyboardButton("🔁 Đổi SNI", callback_data="sni"),
-            InlineKeyboardButton("🔐 Thuê ID Shadowrocket", callback_data="thueid"),
+            plain_button("sni", "Đổi SNI", callback_data="sni"),
+            plain_button("thueid", "Thuê ID Shadowrocket", callback_data="thueid"),
         ],
         [
-            InlineKeyboardButton("🎧 Liên hệ hỗ trợ", callback_data="hotro"),
-            InlineKeyboardButton("❓ Hướng dẫn", callback_data="huongdan"),
+            plain_button("hotro", "Liên hệ hỗ trợ", callback_data="hotro"),
+            plain_button("huongdan", "Hướng dẫn", callback_data="huongdan"),
         ],
     ])
 
