@@ -52,6 +52,8 @@ def escape(text):
 # HẰNG SỐ CHUNG
 # ==========================================
 
+from icons import tg_emoji as _i  # noqa: E402
+
 # Website và tài khoản quản trị viên lấy từ config.py (một nguồn duy nhất).
 from config import ADMIN_URL, ADMIN_USERNAME, WEBSITE  # noqa: E402,F401
 
@@ -69,14 +71,14 @@ WEBSITE_LINE = f'🌐 <a href="{WEBSITE}">5gmatter.site</a>'
 # TRANG CHÍNH
 # ==========================================
 MAIN_TEXT = "\n\n".join([
-    "✨ <b>5G MATTER</b>\n<i>⚡ Tự động · Nhanh chóng · Bảo mật</i>",
+    f"{_i('spark')} <b>5G MATTER</b>\n<i>{_i('bolt')} Tự động · Nhanh chóng · Bảo mật</i>",
     card([
-        "📱 Chọn thiết bị bên dưới để xem cách cài đặt",
-        "📶 <b>Gói nền 4G/5G</b> — giá theo nhà mạng",
-        "🔁 <b>Đổi SNI</b> — có nền / không nền",
-        "🔐 <b>Thuê ID Shadowrocket</b>",
+        f"{_i('phone')} Chọn thiết bị bên dưới để xem cách cài đặt",
+        f"{_i('gonen')} <b>Gói nền 4G/5G</b> — giá theo nhà mạng",
+        f"{_i('sni')} <b>Đổi SNI</b> — có nền / không nền",
+        f"{_i('thueid')} <b>Thuê ID Shadowrocket</b>",
     ]),
-    "💬 Cần hỗ trợ? Bấm <b>Liên hệ hỗ trợ</b>.",
+    f"{_i('chat')} Cần hỗ trợ? Bấm <b>Liên hệ hỗ trợ</b>.",
 ])
 
 
@@ -84,7 +86,7 @@ MAIN_TEXT = "\n\n".join([
 # HƯỚNG DẪN SỬ DỤNG
 # ==========================================
 HELP_TEXT = "\n\n".join([
-    "❓ <b>HƯỚNG DẪN SỬ DỤNG</b>\n<i>Bấm nút hoặc gõ từ khóa, không cần nhớ lệnh</i>",
+    f"{_i('huongdan')} <b>HƯỚNG DẪN SỬ DỤNG</b>\n<i>Bấm nút hoặc gõ từ khóa, không cần nhớ lệnh</i>",
     card([
         "👆 <b>Bấm nút</b> trên menu để chọn thiết bị hoặc gói cước",
         "⌨️ <b>Gõ từ khóa</b>: <code>iphone</code>, <code>android</code>, "
