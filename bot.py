@@ -5,7 +5,7 @@ import logging
 import sys
 import time
 
-from telegram import BotCommand
+from telegram import BotCommand, MessageEntity
 from telegram.error import Conflict, NetworkError, TelegramError
 from telegram.ext import (
     Application,
@@ -86,6 +86,11 @@ def register_handlers(app):
     # Chỉ quản trị viên (kiểm tra trong handler).
     app.add_handler(CommandHandler("restart", handlers.restart))
 
+    # Admin gửi emoji động -> bot trả ID (nhóm -1 để chạy trước auto_reply).
+    app.add_handler(
+        MessageHandler(filters.Entity(MessageEntity.CUSTOM_EMOJI), handlers.emoji_ids),
+        group=-1,
+    )
     app.add_handler(CallbackQueryHandler(handlers.button_handler))
     app.add_handler(
         MessageHandler(filters.TEXT & ~filters.COMMAND, handlers.auto_reply)
