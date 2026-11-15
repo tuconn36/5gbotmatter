@@ -5,12 +5,13 @@ import html
 import logging
 import time
 
-from telegram import CallbackQuery, InlineKeyboardMarkup, LinkPreviewOptions, Update
+from telegram import CallbackQuery, LinkPreviewOptions, MessageEntity, Update
 from telegram.constants import ChatType, ParseMode
 from telegram.error import BadRequest
-from telegram.ext import ContextTypes
+from telegram.ext import ApplicationHandlerStop, ContextTypes
 
 import admin as admin_module
+import icons
 from config import is_admin
 from images import preview_options
 from matching import normalize, pick_page
@@ -113,19 +114,53 @@ def resolve_view(key):
     return None
 
 
+def _is_not_modified(error):
+    """Lỗi 'Message is not modified' khi bấm lại cùng một nút."""
+    raw = getattr(error, "message", None) or str(error)
+    return "message is not modified" in raw.casefold()
+
+
+async def _with_icon_fallback(make_call):
+    """Gọi Telegram; nếu custom emoji bị từ chối thì thử lại bằng emoji thường.
+
+    make_call: hàm không tham số trả về coroutine và TỰ DỰNG bàn phím bên
+    trong, để lần thử lại dựng được bàn phím mới bằng emoji thường.
+
+    Chỉ khi lần thử lại thành công mới coi custom emoji là nguyên nhân và tắt
+    hẳn (lỗi khác như tin quá cũ sẽ không làm mất icon động).
+    """
+    try:
+        return await make_call()
+    except BadRequest as error:
+        if _is_not_modified(error) or not icons.custom_in_use():
+            raise
+        logger.warning("Telegram từ chối, thử lại bằng emoji thường: %s", error)
+        with icons.fallback():
+            result = await make_call()
+        logger.warning(
+            "Đã tắt icon động (bot chưa đủ điều kiện dùng custom emoji "
+            "trên nút bấm). Xem hướng dẫn trong icons.py."
+        )
+        icons.disable()
+        return result
+
+
 async def _reply_view(update: Update, key: str):
     """Gửi một trang dưới dạng tin nhắn mới."""
     message = update.effective_message
-    view = resolve_view(key)
-    if not message or not view:
+    if not message or not resolve_view(key):
         return
-    text, keyboard = view
-    await message.reply_text(
-        text,
-        reply_markup=keyboard,
-        parse_mode=PARSE_MODE,
-        link_preview_options=preview_options(key),
-    )
+
+    async def call():
+        text, keyboard = resolve_view(key)
+        return await message.reply_text(
+            text,
+            reply_markup=keyboard,
+            parse_mode=PARSE_MODE,
+            link_preview_options=preview_options(key),
+        )
+
+    await _with_icon_fallback(call)
 
 
 # ==========================================
@@ -214,29 +249,49 @@ async def restart(update: Update, context: ContextTypes.DEFAULT_TYPE):
     logger.info("Đã lệnh restart bot theo yêu cầu của admin %s", user.id)
 
 
+async def emoji_ids(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Admin gửi tin có emoji động -> bot trả lại custom_emoji_id để dán vào icons.txt."""
+    message = update.effective_message
+    user = update.effective_user
+    if not message or not user or not is_admin(user.id):
+        return  # người thường: để auto_reply xử lý như bình thường
+
+    entities = message.parse_entities([MessageEntity.CUSTOM_EMOJI])
+    lines = []
+    seen = set()
+    for entity, char in entities.items():
+        if entity.custom_emoji_id in seen:
+            continue
+        seen.add(entity.custom_emoji_id)
+        lines.append(f"{html.escape(char)} <code>{entity.custom_emoji_id}</code>")
+    if lines:
+        await message.reply_text(
+            "🆔 <b>ID emoji động</b> — dán vào <code>icons.txt</code> "
+            "dạng <code>tên_icon = ID</code>:\n\n" + "\n".join(lines),
+            parse_mode=PARSE_MODE,
+        )
+    raise ApplicationHandlerStop  # không để auto_reply trả lời thêm
+
+
 # ==========================================
 # NÚT INLINE
 # ==========================================
-async def safe_edit(
-    query: CallbackQuery,
-    text: str,
-    reply_markup: InlineKeyboardMarkup | None = None,
-    link_preview_options=None,
-):
-    """Sửa message, bỏ qua lỗi 'Message is not modified' khi bấm lại cùng nút."""
-    try:
+async def safe_edit(query: CallbackQuery, key: str):
+    """Sửa message thành trang `key`, bỏ qua lỗi 'Message is not modified'."""
+
+    async def call():
+        text, keyboard = resolve_view(key)
         await query.edit_message_text(
             text,
-            reply_markup=reply_markup,
+            reply_markup=keyboard,
             parse_mode=PARSE_MODE,
-            link_preview_options=link_preview_options,
+            link_preview_options=preview_options(key),
         )
+
+    try:
+        await _with_icon_fallback(call)
     except BadRequest as error:
-        raw = getattr(error, "message", None) or str(error)
-        # Thông báo đầy đủ: "Message is not modified: specified new message
-        # content and reply markup are exactly the same as ..." -> phải
-        # kiểm tra theo kiểu "chứa", không phải "kết thúc bằng".
-        if "message is not modified" in raw.casefold():
+        if _is_not_modified(error):
             logger.debug("Bỏ qua lỗi 'message is not modified'")
             return
         logger.warning("Không sửa được message: %s", error)
@@ -294,13 +349,7 @@ async def button_handler(update: Update, context: ContextTypes.DEFAULT_TYPE):
         return
 
     await query.answer()
-    text, keyboard = view
-    await safe_edit(
-        query,
-        text,
-        reply_markup=keyboard,
-        link_preview_options=preview_options(key),
-    )
+    await safe_edit(query, key)
 
 
 # ==========================================
@@ -357,8 +406,10 @@ async def auto_reply(update: Update, context: ContextTypes.DEFAULT_TYPE):
     # Không khớp từ khóa: chỉ gợi ý trong chat riêng, im lặng trong nhóm.
     chat = update.effective_chat
     if chat and chat.type == ChatType.PRIVATE:
-        await message.reply_text(
-            FALLBACK_TEXT,
-            reply_markup=main_keyboard(),
-            parse_mode=PARSE_MODE,
+        await _with_icon_fallback(
+            lambda: message.reply_text(
+                FALLBACK_TEXT,
+                reply_markup=main_keyboard(),
+                parse_mode=PARSE_MODE,
+            )
         )
