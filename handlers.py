@@ -3,6 +3,7 @@
 import asyncio
 import html
 import logging
+import re
 import time
 
 from telegram import CallbackQuery, LinkPreviewOptions, MessageEntity, Update
@@ -250,26 +251,66 @@ async def restart(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 async def emoji_ids(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    """Admin gửi tin có emoji động -> bot trả lại custom_emoji_id để dán vào icons.txt."""
+    """Admin gửi emoji động -> bot tự gán vào icon và trả lại dòng để dán vào icons.txt.
+
+    Cách ghép (ưu tiên từ trên xuống):
+      1. Tin có kèm TÊN icon, số tên bằng số emoji động -> ghép theo thứ tự.
+         Ví dụ:  android 🤖   hoặc   android ios 🤖 🍎   (emoji là emoji động)
+      2. Không kèm tên -> ghép theo emoji gốc (🤖 -> android, 🍎 -> ios...).
+    Icon ghép được áp dụng ngay cho NÚT BẤM; dán vào icons.txt để giữ lâu dài.
+    """
     message = update.effective_message
     user = update.effective_user
     if not message or not user or not is_admin(user.id):
         return  # người thường: để auto_reply xử lý như bình thường
 
     entities = message.parse_entities([MessageEntity.CUSTOM_EMOJI])
-    lines = []
+    emojis = []  # [(emoji gốc, custom_emoji_id)] theo thứ tự, bỏ trùng
     seen = set()
     for entity, char in entities.items():
-        if entity.custom_emoji_id in seen:
-            continue
-        seen.add(entity.custom_emoji_id)
-        lines.append(f"{html.escape(char)} <code>{entity.custom_emoji_id}</code>")
-    if lines:
-        await message.reply_text(
-            "🆔 <b>ID emoji động</b> — dán vào <code>icons.txt</code> "
-            "dạng <code>tên_icon = ID</code>:\n\n" + "\n".join(lines),
-            parse_mode=PARSE_MODE,
+        if entity.custom_emoji_id not in seen:
+            seen.add(entity.custom_emoji_id)
+            emojis.append((char, entity.custom_emoji_id))
+
+    # Tên icon người dùng gõ kèm (chỉ lấy đúng tên có thật, theo thứ tự).
+    typed = re.findall(r"[a-z0-9_]+", (message.text or message.caption or "").lower())
+    names = [w for w in typed if w in icons.FALLBACKS]
+
+    matched = {}
+    unmatched = []
+    if names and len(names) == len(emojis):
+        for name, (_char, emoji_id) in zip(names, emojis):
+            matched[name] = emoji_id
+    else:
+        by_emoji = icons.names_by_emoji()
+        for char, emoji_id in emojis:
+            targets = by_emoji.get(icons.normalize_emoji(char), [])
+            if targets:
+                for name in targets:
+                    matched.setdefault(name, emoji_id)
+            else:
+                unmatched.append((char, emoji_id))
+
+    blocks = []
+    if matched:
+        icons.apply(matched)
+        body = "\n".join(f"{n} = {i}" for n, i in matched.items())
+        blocks.append(
+            "✅ <b>Đã gán icon động cho nút</b> (có hiệu lực ngay).\n"
+            "Dán các dòng này vào <code>icons.txt</code> để giữ lâu dài:\n"
+            f"<pre>{html.escape(body)}</pre>"
         )
+    if unmatched:
+        rows = "\n".join(f"{html.escape(c)} <code>{i}</code>" for c, i in unmatched)
+        blocks.append(
+            "❔ <b>Chưa gán được</b> (emoji này không trùng icon nào):\n" + rows + "\n\n"
+            "Gửi lại <b>kèm tên icon</b> rồi tới emoji động, ví dụ: <code>android</code> + emoji."
+        )
+    if unmatched or not matched:
+        blocks.append(
+            "🏷 Tên icon: " + ", ".join(f"<code>{n}</code>" for n in icons.FALLBACKS)
+        )
+    await message.reply_text("\n\n".join(blocks), parse_mode=PARSE_MODE)
     raise ApplicationHandlerStop  # không để auto_reply trả lời thêm
 
 
