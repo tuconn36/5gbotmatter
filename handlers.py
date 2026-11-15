@@ -3,11 +3,13 @@
 import asyncio
 import html
 import logging
+import os
+import random
 import time
 
 from telegram import CallbackQuery, LinkPreviewOptions, MessageEntity, Update
 from telegram.constants import ChatType, ParseMode
-from telegram.error import BadRequest
+from telegram.error import BadRequest, TelegramError
 from telegram.ext import ApplicationHandlerStop, ContextTypes
 
 import admin as admin_module
@@ -145,6 +147,116 @@ async def _with_icon_fallback(make_call):
         return result
 
 
+# ==========================================
+# TỰ TAN BIẾN
+# ==========================================
+# Tin bot gửi (menu, hướng dẫn, /id, /ping...) tự "tan biến" sau 3-4 phút
+# KHÔNG có thao tác. Mỗi lần người dùng bấm nút, đồng hồ được tính lại.
+# Nếu tin do lệnh (/start, /goi...) sinh ra, tin lệnh của người dùng cũng bị
+# xoá cùng lúc (trong nhóm cần quyền xoá tin; không có quyền thì bỏ qua).
+# Đặt biến môi trường AUTO_DISSOLVE=0 để tắt.
+AUTO_DISSOLVE = os.environ.get("AUTO_DISSOLVE", "1").strip().lower() not in {
+    "0", "false", "off", "no",
+}
+DISSOLVE_IDLE_RANGE = (180, 240)  # giây: ngẫu nhiên 3-4 phút
+
+# Thời gian hiển thị hiệu ứng tan biến trước khi xoá tin nhắn (giây).
+DISSOLVE_SECONDS = 1.3
+
+_NO_PREVIEW = LinkPreviewOptions(is_disabled=True)
+
+# (chat_id, message_id) của tin bot -> task đang đếm giờ.
+_pending = {}
+# (chat_id, message_id) của tin bot -> message_id tin lệnh của người dùng.
+_user_msgs = {}
+
+
+async def _delete_quietly(bot, chat_id, message_id):
+    try:
+        await bot.delete_message(chat_id=chat_id, message_id=message_id)
+    except TelegramError as error:
+        logger.debug("Không xoá được tin %s: %s", message_id, error)
+
+
+async def _vanish(bot, chat_id, message_id, plain):
+    """Đổi tin sang spoiler (hạt bụi tan biến) rồi xoá, kèm tin lệnh của user."""
+    if plain:
+        try:
+            await bot.edit_message_text(
+                chat_id=chat_id,
+                message_id=message_id,
+                text=f"<tg-spoiler>{html.escape(plain)}</tg-spoiler>",
+                parse_mode=PARSE_MODE,
+                link_preview_options=_NO_PREVIEW,
+            )
+            await asyncio.sleep(DISSOLVE_SECONDS)
+        except TelegramError as error:
+            logger.debug("Không đổi được sang spoiler: %s", error)
+    await _delete_quietly(bot, chat_id, message_id)
+    user_message_id = _user_msgs.pop((chat_id, message_id), None)
+    if user_message_id:
+        await _delete_quietly(bot, chat_id, user_message_id)
+
+
+def cancel_dissolve(key):
+    """Huỷ đồng hồ tan biến của một tin (nếu có)."""
+    task = _pending.pop(key, None)
+    if task:
+        task.cancel()
+
+
+def schedule_dissolve(bot, chat_id, message_id, plain, user_message_id=None):
+    """Hẹn giờ cho tin; gọi lại cho cùng một tin sẽ đặt lại đồng hồ."""
+    if not AUTO_DISSOLVE or not chat_id or not message_id:
+        return
+    key = (chat_id, message_id)
+    if user_message_id:
+        _user_msgs[key] = user_message_id
+    cancel_dissolve(key)
+
+    async def runner():
+        await asyncio.sleep(random.uniform(*DISSOLVE_IDLE_RANGE))
+        await _vanish(bot, chat_id, message_id, plain)
+
+    task = asyncio.create_task(runner())
+    _pending[key] = task
+    task.add_done_callback(
+        lambda t, k=key: _pending.pop(k, None) if _pending.get(k) is t else None
+    )
+
+
+def _track(sent, command_message=None):
+    """Hẹn giờ tan biến cho tin bot vừa gửi.
+
+    command_message: tin của người dùng đã sinh ra tin này; chỉ bị xoá khi
+    nó là một lệnh (bắt đầu bằng "/").
+    """
+    if sent is None or not hasattr(sent, "message_id"):
+        return
+    user_message_id = None
+    if command_message is not None:
+        text = getattr(command_message, "text", None) or ""
+        if text.startswith("/"):
+            user_message_id = command_message.message_id
+    schedule_dissolve(
+        sent.get_bot(), sent.chat_id, sent.message_id, sent.text, user_message_id
+    )
+
+
+def _retrack(query, edited=None):
+    """Người dùng vừa bấm nút trên tin này -> tính lại 3-4 phút."""
+    message = query.message
+    if message is None:
+        return
+    source = edited if hasattr(edited, "text") else message
+    schedule_dissolve(
+        query.get_bot(),
+        message.chat.id,
+        message.message_id,
+        getattr(source, "text", None),
+    )
+
+
 async def _reply_view(update: Update, key: str):
     """Gửi một trang dưới dạng tin nhắn mới."""
     message = update.effective_message
@@ -160,7 +272,8 @@ async def _reply_view(update: Update, key: str):
             link_preview_options=preview_options(key),
         )
 
-    await _with_icon_fallback(call)
+    sent = await _with_icon_fallback(call)
+    _track(sent, message)
 
 
 # ==========================================
@@ -202,7 +315,8 @@ async def user_id(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user = update.effective_user
     if not message or not user:
         return
-    await message.reply_text(user_info_text(user), parse_mode=PARSE_MODE)
+    sent = await message.reply_text(user_info_text(user), parse_mode=PARSE_MODE)
+    _track(sent, message)
 
 
 async def ping(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -211,10 +325,12 @@ async def ping(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if not message:
         return
     start_at = time.perf_counter()
-    await message.reply_text("⏱️ Đang kiểm tra...")
+    checking = await message.reply_text("⏱️ Đang kiểm tra...")
+    _track(checking)
     elapsed = (time.perf_counter() - start_at) * 1000
     uptime = int(time.time() - START_TIME)
-    await message.reply_text(ping_text(elapsed, uptime), parse_mode=PARSE_MODE)
+    sent = await message.reply_text(ping_text(elapsed, uptime), parse_mode=PARSE_MODE)
+    _track(sent, message)
 
 
 async def restart(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -281,7 +397,7 @@ async def safe_edit(query: CallbackQuery, key: str):
 
     async def call():
         text, keyboard = resolve_view(key)
-        await query.edit_message_text(
+        return await query.edit_message_text(
             text,
             reply_markup=keyboard,
             parse_mode=PARSE_MODE,
@@ -289,17 +405,15 @@ async def safe_edit(query: CallbackQuery, key: str):
         )
 
     try:
-        await _with_icon_fallback(call)
+        edited = await _with_icon_fallback(call)
     except BadRequest as error:
         if _is_not_modified(error):
             logger.debug("Bỏ qua lỗi 'message is not modified'")
+            _retrack(query)
             return
         logger.warning("Không sửa được message: %s", error)
         raise
-
-
-# Thời gian hiển thị hiệu ứng tan biến trước khi xoá tin nhắn (giây).
-DISSOLVE_SECONDS = 1.3
+    _retrack(query, edited)
 
 
 async def dissolve_message(query: CallbackQuery):
@@ -312,6 +426,9 @@ async def dissolve_message(query: CallbackQuery):
     await query.answer("✅ Hoàn tất!")
     message = query.message
     plain = getattr(message, "text", None)
+    key = (message.chat.id, message.message_id)
+    cancel_dissolve(key)  # đã tan biến thủ công, khỏi hẹn giờ nữa
+    user_message_id = _user_msgs.pop(key, None)
     try:
         if plain:
             await query.edit_message_text(
@@ -322,6 +439,8 @@ async def dissolve_message(query: CallbackQuery):
             )
             await asyncio.sleep(DISSOLVE_SECONDS)
         await message.delete()
+        if user_message_id:
+            await _delete_quietly(query.get_bot(), key[0], user_message_id)
     except BadRequest as error:
         # Không xoá được (tin quá cũ, đã bị xoá, bấm đúp...) -> để lại lời chốt.
         logger.info("Không xoá được tin nhắn sau khi Xong: %s", error)
@@ -406,10 +525,11 @@ async def auto_reply(update: Update, context: ContextTypes.DEFAULT_TYPE):
     # Không khớp từ khóa: chỉ gợi ý trong chat riêng, im lặng trong nhóm.
     chat = update.effective_chat
     if chat and chat.type == ChatType.PRIVATE:
-        await _with_icon_fallback(
+        sent = await _with_icon_fallback(
             lambda: message.reply_text(
                 FALLBACK_TEXT,
                 reply_markup=main_keyboard(),
                 parse_mode=PARSE_MODE,
             )
         )
+        _track(sent, message)
