@@ -1,7 +1,7 @@
 # Pin chính xác để build tái lập được.
 # Nâng phiên bản cần kiểm lại hành vi (vd PTB v22 đổi cách bóc tiền tố
 # trong TelegramError, và đổi hành vi validation token trong Bot.__init__).
-python-telegram-bot==21.11
+python-telegram-bot==22.7
 
 # Pin transitive để tránh CI cài phiên bản mới gây hỏng ngoài dự kiến.
 httpx==0.27.2
