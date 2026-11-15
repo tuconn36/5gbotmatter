@@ -382,8 +382,8 @@ async def emoji_ids(update: Update, context: ContextTypes.DEFAULT_TYPE):
         lines.append(f"{html.escape(char)} <code>{entity.custom_emoji_id}</code>")
     if lines:
         await message.reply_text(
-            "🆔 <b>ID emoji động</b> — dán vào <code>icons.txt</code> "
-            "dạng <code>tên_icon = ID</code>:\n\n" + "\n".join(lines),
+            "🆔 <b>emoji động</b>"
+            
             parse_mode=PARSE_MODE,
         )
     raise ApplicationHandlerStop  # không để auto_reply trả lời thêm
