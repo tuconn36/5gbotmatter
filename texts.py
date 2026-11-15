@@ -52,7 +52,7 @@ def escape(text):
 # HẰNG SỐ CHUNG
 # ==========================================
 
-from icons import tg_emoji as _i  # noqa: E402
+from icons import lead_icon as _lead, tg_emoji as _i  # noqa: E402
 
 # Website và tài khoản quản trị viên lấy từ config.py (một nguồn duy nhất).
 from config import ADMIN_URL, ADMIN_USERNAME, WEBSITE  # noqa: E402,F401
@@ -71,14 +71,14 @@ WEBSITE_LINE = f'🌐 <a href="{WEBSITE}">5gmatter.site</a>'
 # TRANG CHÍNH
 # ==========================================
 MAIN_TEXT = "\n\n".join([
-    f"{_i('spark')} <b>5G MATTER</b>\n<i>{_i('bolt')} Tự động · Nhanh chóng · Bảo mật</i>",
+    f"{_lead('spark')}<b>5G MATTER</b>\n<i>{_lead('bolt')}Tự động · Nhanh chóng · Bảo mật</i>",
     card([
-        f"{_i('phone')} Chọn thiết bị bên dưới để xem cách cài đặt",
-        f"{_i('gonen')} <b>Gói nền 4G/5G</b> — giá theo nhà mạng",
-        f"{_i('sni')} <b>Đổi SNI</b> — có nền / không nền",
-        f"{_i('thueid')} <b>Thuê ID Shadowrocket</b>",
+        f"{_lead('phone')}Chọn thiết bị bên dưới để xem cách cài đặt",
+        f"{_lead('gonen')}<b>Gói nền 4G/5G</b> — giá theo nhà mạng",
+        f"{_lead('sni')}<b>Đổi SNI</b> — có nền / không nền",
+        f"{_lead('thueid')}<b>Thuê ID Shadowrocket</b>",
     ]),
-    f"{_i('chat')} Cần hỗ trợ? Bấm <b>Liên hệ hỗ trợ</b>.",
+    f"{_lead('chat')}Cần hỗ trợ? Bấm <b>Liên hệ hỗ trợ</b>.",
 ])
 
 
