@@ -12,7 +12,7 @@ BOT_NAME = "5G MATTER"
 
 # Website bán gói và tài khoản quản trị viên (dùng cho nút / liên kết).
 WEBSITE = "https://5gmatter.site/"
-ADMIN_USERNAME = "tune789"
+ADMIN_USERNAME = "@tuconn5g"
 ADMIN_URL = f"https://t.me/{ADMIN_USERNAME}"
 
 MISSING_TOKEN_MESSAGE = (
