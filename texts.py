@@ -59,12 +59,12 @@ from config import ADMIN_URL, ADMIN_USERNAME, WEBSITE  # noqa: E402,F401
 
 # Cảnh báo dùng chung cho mọi trang gói nền của nhà mạng.
 REGISTER_WARNING = (
-    "⚠️ <b>Đăng ký gói nền là bắt buộc</b> — "
+    "<b>Đăng ký gói nền là bắt buộc</b> — "
     "không đăng ký sẽ không dùng được 4G/5G."
 )
 
 # Dòng website dùng trong thẻ.
-WEBSITE_LINE = f'🌐 <a href="{WEBSITE}">5gmatter.site</a>'
+WEBSITE_LINE = f'<a href="{WEBSITE}">5gmatter.site</a>'
 
 
 # ==========================================
@@ -86,10 +86,10 @@ MAIN_TEXT = "\n\n".join([
 # HƯỚNG DẪN SỬ DỤNG
 # ==========================================
 HELP_TEXT = "\n\n".join([
-    f"{_i('huongdan')} <b>HƯỚNG DẪN SỬ DỤNG</b>\n<i>Bấm nút hoặc gõ từ khóa, không cần nhớ lệnh</i>",
+    f"{_lead('huongdan')}<b>HƯỚNG DẪN SỬ DỤNG</b>\n<i>Bấm nút hoặc gõ từ khóa, không cần nhớ lệnh</i>",
     card([
-        "👆 <b>Bấm nút</b> trên menu để chọn thiết bị hoặc gói cước",
-        "⌨️ <b>Gõ từ khóa</b>: <code>iphone</code>, <code>android</code>, "
+        "<b>Bấm nút</b> trên menu để chọn thiết bị hoặc gói cước",
+        "<b>Gõ từ khóa</b>: <code>iphone</code>, <code>android</code>, "
         "<code>windows</code>, <code>gói nền</code>, <code>sni</code>, <code>hỗ trợ</code>",
     ]),
     section("LỆNH NHANH") + "\n" + card([
@@ -211,10 +211,10 @@ def render_device(device):
         for app_id in info["apps"]
     ]
     return "\n\n".join([
-        f"{info['icon']} <b>{info['name'].upper()}</b>\n"
+        f"{_lead(device)}<b>{info['name'].upper()}</b>\n"
         "<i>Chọn một ứng dụng để xem hướng dẫn</i>",
         card(lines),
-        "💡 Cần có cấu hình mà bot gửi sau khi đăng ký gói nền.",
+        "Cần có cấu hình mà bot gửi sau khi đăng ký gói nền.",
     ])
 
 
@@ -226,14 +226,14 @@ def render_step(app_id, number):
     title, detail = app["steps"][number - 1]
     progress = "▰" * number + "▱" * (total - number)
     blocks = [
-        f"{info['icon']} <b>{app['name']}</b> · <i>{info['name']}</i>",
+        f"{_lead(app['device'])}<b>{app['name']}</b> · <i>{info['name']}</i>",
         f"<b>Bước {number}/{total}</b> · {title}\n{progress}",
         card([detail]),
     ]
     if number == total:
         if app.get("tip"):
-            blocks.append(f"💡 {app['tip']}")
-        blocks.append("🎉 Xong rồi, chúc bạn dùng vui vẻ!")
+            blocks.append(app["tip"])
+        blocks.append("Xong rồi, chúc bạn dùng vui vẻ!")
     return "\n\n".join(blocks)
 
 
@@ -254,42 +254,42 @@ for _app_id, _app in APP_GUIDES.items():
 
 PAGES = {
     "gonen": "\n\n".join([
-        "📶 <b>GÓI NỀN 4G/5G</b>\n"
+        f"{_lead('gonen')}<b>GÓI NỀN 4G/5G</b>\n"
         "<i>Đăng ký gói nền để có data ưu tiên trên mọi ứng dụng</i>",
         section("CHỌN NHÀ MẠNG") + "\n" + card([
-            "🔴 <b>Viettel</b> — TikTok 50K, gói tuần T15KN, MXH100",
-            "🔵 <b>VinaPhone</b> — gói 0 NỀN miễn phí, TK30",
-            "🟢 <b>MobiFone</b> — gói DK TIK30 30 ngày",
+            f"{_lead('viettel')}<b>Viettel</b> — TikTok 50K, gói tuần T15KN, MXH100",
+            f"{_lead('vina')}<b>VinaPhone</b> — gói 0 NỀN miễn phí, TK30",
+            f"{_lead('mobi')}<b>MobiFone</b> — gói DK TIK30 30 ngày",
         ]),
         section("LƯU Ý") + "\n" + card([REGISTER_WARNING]),
     ]),
     "thueid": "\n\n".join([
-        "🔐 <b>THUÊ ID SHADOWROCKET</b>\n"
+        f"{_lead('thueid')}<b>THUÊ ID SHADOWROCKET</b>\n"
         "<i>Thông tin thuê Apple ID hỗ trợ tải ứng dụng</i>",
         section("BẠN SẼ NHẬN ĐƯỢC") + "\n" + card([
-            "🍎 <b>Apple ID</b> dùng riêng cho việc tải ứng dụng",
-            "🔑 Thông tin đăng nhập kèm hướng dẫn sử dụng",
+            f"{_lead('ios')}<b>Apple ID</b> dùng riêng cho việc tải ứng dụng",
+            "Thông tin đăng nhập kèm hướng dẫn sử dụng",
         ]),
         section("LIÊN HỆ") + "\n" + card([
-            f"💬 Quản trị viên: <b>@{ADMIN_USERNAME}</b>",
+            f"{_lead('chat')}Quản trị viên: <b>@{ADMIN_USERNAME}</b>",
             WEBSITE_LINE,
         ]),
     ]),
     "hotro": "\n\n".join([
-        "🎧 <b>LIÊN HỆ HỖ TRỢ</b>\n"
+        f"{_lead('hotro')}<b>LIÊN HỆ HỖ TRỢ</b>\n"
         "<i>Đội ngũ 5G MATTER sẵn sàng hỗ trợ bạn</i>",
         card([
-            f"💬 Quản trị viên: <b>@{ADMIN_USERNAME}</b>",
+            f"{_lead('chat')}Quản trị viên: <b>@{ADMIN_USERNAME}</b>",
             WEBSITE_LINE,
-            "🆔 Gửi kèm ID của bạn (lệnh <code>/id</code>) để được xử lý nhanh hơn",
+            "Gửi kèm ID của bạn (lệnh <code>/id</code>) để được xử lý nhanh hơn",
         ]),
     ]),
     "sni": "\n\n".join([
-        "🔁 <b>ĐỔI SNI</b>\n"
+        f"{_lead('sni')}<b>ĐỔI SNI</b>\n"
         "<i>Chọn loại SIM của bạn để xem hướng dẫn</i>",
         card([
-            "🚫 <b>Không nền</b> — SIM VinaPhone 0đ",
-            "✅ <b>Có nền</b> — tất cả các SIM còn lại",
+            f"{_lead('khongnen')}<b>Không nền</b> — SIM VinaPhone 0đ",
+            f"{_lead('conen')}<b>Có nền</b> — tất cả các SIM còn lại",
         ]),
     ]),
     "huongdan": HELP_TEXT,
@@ -301,7 +301,7 @@ PAGES = {
 # Sửa nội dung từng bước ở đây. Mỗi bước: (tiêu đề, nội dung chi tiết).
 # Ảnh minh hoạ của bước dùng tên "<loại>_<số bước>" trong image_links.txt,
 # vd sni_khongnen_1, sni_conen_3.
-_SNI_PHOTO = "📸 Làm theo ảnh hướng dẫn."
+_SNI_PHOTO = "Làm theo ảnh hướng dẫn."
 
 SNI_GUIDES = {
     "sni_khongnen": {
@@ -332,7 +332,7 @@ def render_sni_step(option, number):
         card([detail]),
     ]
     if number == total:
-        blocks.append("🎉 Xong rồi, chúc bạn dùng vui vẻ!")
+        blocks.append("Xong rồi, chúc bạn dùng vui vẻ!")
     return "\n\n".join(blocks)
 
 
@@ -443,10 +443,21 @@ NETWORK_PACKAGES = {
     ],
 }
 
+# nhà mạng -> (tên icon, tiêu đề)
 NETWORK_HEADERS = {
-    "vina": ("🔵", "Gói nền VinaPhone"),
-    "viettel": ("🔴", "Gói nền Viettel"),
-    "mobi": ("🟢", "Gói nền MobiFone"),
+    "vina": ("vina", "Gói nền VinaPhone"),
+    "viettel": ("viettel", "Gói nền Viettel"),
+    "mobi": ("mobi", "Gói nền MobiFone"),
+}
+
+# key gói -> tên icon (xem icons.py) dùng cho thẻ gói.
+PACKAGE_ICON = {
+    "pkg_vina_0": "vina0",
+    "pkg_vina_30": "tk30",
+    "pkg_viettel_t15kn": "t15kn",
+    "pkg_viettel_tiktok": "tiktok",
+    "pkg_viettel_mxh100": "mxh100",
+    "pkg_mobi_tiktok": "tiktok",
 }
 
 
@@ -459,17 +470,18 @@ def package_card(package):
     lại mất bold/italic/link). Gạch trái luôn căn, nội dung vẫn định
     dạng đầy đủ.
     """
-    icon = package.get("icon", "📦")
+    icon_name = PACKAGE_ICON.get(package["key"])
+    lead = _lead(icon_name) if icon_name else ""
     lines = [
-        f"<b>{icon} {package['title']}</b> · <code>{package['price']}</code>",
+        f"<b>{lead}{package['title']}</b> · <code>{package['price']}</code>",
     ]
     if package.get("tagline"):
         lines.append(f"<i>{package['tagline']}</i>")
     for bullet in package["bullets"]:
         lines.append(f"• {bullet}")
     if package.get("note"):
-        lines.append(f"💡 {package['note']}")
-    lines.append(f"👉 {package['action']}")
+        lines.append(package["note"])
+    lines.append(package["action"])
     return card(lines)
 
 
@@ -496,7 +508,7 @@ def render_network(network, only_key=None):
         )
 
     blocks = [
-        f"{icon} <b>{title}</b>\n{subtitle}",
+        f"{_lead(icon)}<b>{title}</b>\n{subtitle}",
         REGISTER_WARNING,
     ]
     for package in packages:
