@@ -210,10 +210,10 @@ APP_GUIDES = {
         "source": "miễn phí trên App Store",
         "download_url": "https://apps.apple.com/vn/app/happ-proxy-utility/id6504287215",
         "steps": [
-            ("Tải ứng dụng", "Tải <b>Happ</b> trên App Store rồi mở app."),
+            ("Tải ứng dụng", "Tải <b>Happ</b> trên App Store rồi mở app"),
             ("Copy", "Bấm <b>Nhập đăng kí</b> → Bấm sao chép"),
-            ("Nhập cấu hình", Bấm Clipboard),
-            ("Kết nối", "Bấm nút kết nối → bấm <b>Cho phép</b> khi iPhone hỏi thêm VPN."),
+            ("Nhập cấu hình", Bấm Clipboard"),
+            ("Kết nối", "Bấm nút kết nối → bấm <b>Cho phép</b> khi iPhone hỏi thêm VPN"),
         ],
     },
     "ios_hiddify": {
@@ -231,19 +231,19 @@ APP_GUIDES = {
 
             ("Mở ứng dụng",
             "Sau khi cài đặt, mở <b>Hiddify</b> "
-            "trên iPhone và hoàn tất màn hình giới thiệu."
+            "trên iPhone và hoàn tất màn hình giới thiệu"
             ),
 
             ("Thêm cấu hình",
             "Sao chép link cấu hình 5G MATTER "
             "Mở Hiddify, bấm nút <b>＋</b>, "
-            "chọn nhập từ Clipboard hoặc dán link cấu hình."
+            "chọn nhập từ Clipboard hoặc dán link cấu hình"
             ),
 
             ("Kết nối VPN",
-            "Chọn hồ sơ vừa thêm và bấm nút kết nối. "
+            "Chọn hồ sơ vừa thêm và bấm nút kết nối "
             "Khi iPhone hỏi thêm cấu hình VPN, "
-            "bấm <b>Cho phép</b> và nhập mật mã điện thoại."
+            "bấm <b>Cho phép</b> và nhập mật mã điện thoại"
             ),
         ],
     },
