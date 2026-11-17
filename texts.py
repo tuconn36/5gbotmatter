@@ -181,6 +181,41 @@ APP_GUIDES = {
             ("Kết nối", "Bấm nút kết nối → bấm <b>Allow</b> khi iPhone hỏi thêm VPN."),
         ],
     },
+    "ios_hiddify": {
+    "device": "ios",
+    "name": "Hiddify 5.5.5",
+    "source": "miễn phí trên App Store",
+
+    "download_url": (
+            "https://apps.apple.com/vn/app/"
+            "hiddify-proxy-vpn/id6596777532"
+            ),
+
+    "steps": [
+            ("Tải ứng dụng",
+            "Bấm nút <b>Tải Hiddify trên App Store</b> "
+            "bên dưới → chọn <b>Nhận (Get)</b> → "
+            "xác nhận Face ID hoặc Touch ID."
+            ),
+
+            ("Mở ứng dụng",
+            "Sau khi cài đặt, mở <b>Hiddify</b> "
+            "trên iPhone và hoàn tất màn hình giới thiệu."
+            ),
+
+            ("Thêm cấu hình",
+            "Sao chép link cấu hình do bot 5G MATTER gửi. "
+            "Mở Hiddify, bấm nút <b>＋</b>, "
+            "chọn nhập từ Clipboard hoặc dán link cấu hình."
+            ),
+
+            ("Kết nối VPN",
+            "Chọn hồ sơ vừa thêm và bấm nút kết nối. "
+            "Khi iPhone hỏi thêm cấu hình VPN, "
+            "bấm <b>Allow</b> và nhập mật mã điện thoại."
+            ),
+        ],
+    },
     "windows_v2rayn": {
         "device": "windows",
         "name": "v2rayN",
