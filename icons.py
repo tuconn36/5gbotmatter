@@ -17,7 +17,7 @@ ICON_FILE = os.path.join(BASE_DIR, "icons.txt")
 FALLBACKS = {
     "android": "🤖", "ios": "🍎", "windows": "🖥️",
     "gonen": "📶", "sni": "🔁", "thueid": "🔐", "hotro": "🎧",
-    "huongdan": "❓", "chat": "💬", "app": "📲",
+    "huongdan": "❓", "chat": "💬", "app": "📲","download": "📥",
     "home": "🏠", "back": "🔙", "prev": "◀", "next": "▶", "done": "✅",
     "viettel": "🔴", "vina": "🔵", "mobi": "🟢",
     "t15kn": "📆", "tiktok": "🎵", "mxh100": "💪",
