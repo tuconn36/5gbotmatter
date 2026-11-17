@@ -134,6 +134,7 @@ APP_GUIDES = {
         "device": "android",
         "name": "v2rayNG",
         "source": "tải trên CH Play",
+        "download_url": "https://github.com/2dust/v2rayNG/releases",
         "steps": [
             ("Tải ứng dụng", "Tải <b>v2rayNG</b> trên CH Play rồi mở app."),
             ("Nhập cấu hình", _IMPORT),
@@ -144,6 +145,7 @@ APP_GUIDES = {
         "device": "android",
         "name": "Happ",
         "source": "tải trên CH Play",
+        "download_url": "https://play.google.com/store/apps/details?id=com.happproxy",
         "steps": [
             ("Tải ứng dụng", "Tải <b>Happ</b> trên CH Play rồi mở app."),
             ("Nhập cấu hình", _IMPORT),
@@ -154,42 +156,71 @@ APP_GUIDES = {
         "device": "ios",
         "name": "Shadowrocket",
         "source": "tải trên App Store (trả phí)",
+        "download_url": "https://apps.apple.com/app/shadowrocket/id932747118",
         "steps": [
             ("Tải ứng dụng", "Tải <b>Shadowrocket</b> trên App Store rồi mở app."),
-            ("Nhập cấu hình", "Bấm <b>＋</b> → <b>Import from File</b> → chọn file cấu hình."),
-            ("Kết nối", "Bật công tắc kết nối."),
-            ("Cho phép VPN", "Bấm <b>Allow</b> khi iPhone hỏi thêm cấu hình VPN."),
+            ("Nhập cấu hình", "Bấm <b>Nhập đăng kí</b> → <b>Xong bấm Shadow</b>"),
+            ("Kết nối", "Bấm mở"),
+            ("Cho phép VPN", "Bật <b>KẾT NỐI VPN</b> (khi iPhone hỏi thêm cấu hình → Cho phép) "),
         ],
     },
     "ios_v2box": {
         "device": "ios",
         "name": "V2Box",
         "source": "tải trên App Store",
-        "steps": [
-            ("Tải ứng dụng", "Tải <b>V2Box</b> trên App Store rồi mở app."),
-            ("Nhập cấu hình", _IMPORT),
-            ("Kết nối", "Chọn máy chủ → bấm kết nối → bấm <b>Allow</b> khi iPhone hỏi thêm VPN."),
-        ],
+        "download_url": "https://apps.apple.com/app/v2box-v2ray-client/id6446814690",
+        
+"steps": [
+    (
+        "Tải ứng dụng",
+        "Truy cập <b>App Store</b>, tìm kiếm ứng dụng <b>V2Box</b> và tiến hành tải về iPhone "
+        "Sau khi cài đặt hoàn tất, nhấn <b>Mở</b> để khởi động ứng dụng "
+        "Đảm bảo bạn đã cài đúng ứng dụng V2Box trước khi chuyển sang bước tiếp theo"
+    ),
+
+    (
+        "Copy đăng ký",
+        "Quay lại tin nhắn hướng dẫn của <b>5G MATTER</b>, tìm phần thông tin cấu hình được cung cấp "
+        "Nhấn nút <b>Nhập đăng ký</b> để hiển thị liên kết đăng ký cấu hình "
+        "Tiếp theo, nhấn <b>Sao chép</b> để copy "
+        "Sau khi sao chép thành công, quay lại ứng dụng V2Box để tiếp tục"
+    ),
+
+    (
+        "Nhập cấu hình",
+        "Mở ứng dụng <b>V2Box</b>, tại giao diện chính nhấn vào dấu <b>+</b> để thêm cấu hình mới. "
+        "Chọn mục <b>Nhập từ Clipboard</b> (Bấm Clipboard) "
+        "Ứng dụng sẽ tự động nhận liên kết đăng ký mà bạn vừa sao chép "
+        "Chờ ứng dụng tải danh sách máy chủ và hoàn tất quá trình nhập cấu hình "
+    ),
+
+    (
+        "Kết nối VPN",
+        "Sau khi nhập cấu hình thành công, chọn một <b>máy chủ</b> trong danh sách vừa tải "
+        "Nhấn nút <b>Kết nối</b> để bắt đầu sử dụng VPN "
+        "Nếu iPhone hiển thị thông báo yêu cầu thêm cấu hình VPN, hãy chọn <b>Cho phép</b> "
+        "Chờ ứng dụng kết nối thành công"
+    ),
+],
+
     },
     "ios_happ": {
         "device": "ios",
         "name": "Happ",
         "source": "miễn phí trên App Store",
+        "download_url": "https://apps.apple.com/vn/app/happ-proxy-utility/id6504287215",
         "steps": [
             ("Tải ứng dụng", "Tải <b>Happ</b> trên App Store rồi mở app."),
-            ("Nhập cấu hình", _IMPORT),
-            ("Kết nối", "Bấm nút kết nối → bấm <b>Allow</b> khi iPhone hỏi thêm VPN."),
+            ("Copy", "Bấm <b>Nhập đăng kí</b> → Bấm sao chép),
+            ("Nhập cấu hình", Bấm Clipboard),
+            ("Kết nối", "Bấm nút kết nối → bấm <b>Cho phép</b> khi iPhone hỏi thêm VPN."),
         ],
     },
     "ios_hiddify": {
     "device": "ios",
     "name": "Hiddify 5.5.5",
+    "download_url": "https://apps.apple.com/vn/app/hiddify-proxy-vpn/id6596777532",
     "source": "miễn phí trên App Store",
-
-    "download_url": (
-            "https://apps.apple.com/vn/app/"
-            "hiddify-proxy-vpn/id6596777532"
-            ),
 
     "steps": [
             ("Tải ứng dụng",
@@ -204,7 +235,7 @@ APP_GUIDES = {
             ),
 
             ("Thêm cấu hình",
-            "Sao chép link cấu hình do bot 5G MATTER gửi. "
+            "Sao chép link cấu hình 5G MATTER "
             "Mở Hiddify, bấm nút <b>＋</b>, "
             "chọn nhập từ Clipboard hoặc dán link cấu hình."
             ),
@@ -212,7 +243,7 @@ APP_GUIDES = {
             ("Kết nối VPN",
             "Chọn hồ sơ vừa thêm và bấm nút kết nối. "
             "Khi iPhone hỏi thêm cấu hình VPN, "
-            "bấm <b>Allow</b> và nhập mật mã điện thoại."
+            "bấm <b>Cho phép</b> và nhập mật mã điện thoại."
             ),
         ],
     },
@@ -220,6 +251,7 @@ APP_GUIDES = {
         "device": "windows",
         "name": "v2rayN",
         "source": "tải miễn phí trên GitHub (2dust/v2rayN)",
+        "download_url": "https://github.com/2dust/v2rayN/releases",
         "steps": [
             ("Tải ứng dụng", "Tải <b>v2rayN</b>, giải nén rồi mở lên."),
             ("Nhập cấu hình", "Menu <b>Servers</b> → <b>Import server from file</b> → chọn file."),
@@ -231,6 +263,7 @@ APP_GUIDES = {
         "device": "windows",
         "name": "Happ",
         "source": "tải bản Windows trên trang chủ Happ",
+        "download_url": "https://www.happ.su/main",
         "steps": [
             ("Tải ứng dụng", "Tải <b>Happ</b> bản Windows rồi mở lên."),
             ("Nhập cấu hình", _IMPORT),
