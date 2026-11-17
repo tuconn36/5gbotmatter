@@ -162,7 +162,7 @@ def step_keyboard(key):
     # Chỉ hiện nút tải tại bước 1
     if number == 1 and app.get("download_url"):
         download_button = button(
-            "app",
+            "download",
             f"Tải {app['name']}",
             url=app["download_url"],
         )
