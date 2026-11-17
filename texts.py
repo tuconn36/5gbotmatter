@@ -212,7 +212,7 @@ APP_GUIDES = {
         "steps": [
             ("Tải ứng dụng", "Tải <b>Happ</b> trên App Store rồi mở app"),
             ("Copy", "Bấm <b>Nhập đăng kí</b> → Bấm sao chép"),
-            ("Nhập cấu hình", Bấm Clipboard"),
+            ("Nhập cấu hình", "Bấm Clipboard"),
             ("Kết nối", "Bấm nút kết nối → bấm <b>Cho phép</b> khi iPhone hỏi thêm VPN"),
         ],
     },
