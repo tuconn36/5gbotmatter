@@ -109,13 +109,19 @@ DEVICE_APPS = {
         "icon": "🤖", "name": "Android",
         "apps": ["android_v2rayng", "android_happ"],
     },
-    "ios": {
-        "icon": "🍎", "name": "iOS",
-        "apps": ["ios_shadowrocket", "ios_v2box", "ios_happ"],
+   "ios": {
+    "icon": "🍎", "name": "iOS",
+    "apps": [
+        "ios_shadowrocket",
+        "ios_v2box",
+        "ios_happ",
+        "ios_hiddify",
+            ],
     },
     "windows": {
         "icon": "🖥️", "name": "Windows",
-        "apps": ["windows_v2rayn", "windows_happ"],
+        "apps": ["windows_v2rayn",
+                  "windows_happ"],
     },
 }
 
