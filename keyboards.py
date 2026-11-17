@@ -144,15 +144,38 @@ def _step_nav(back_label_cb, prev_cb, next_cb, number, total):
 
 
 def step_keyboard(key):
-    """Nút điều hướng cho một bước: Bước trước / Bước tiếp."""
+    """Nút điều hướng cho từng bước hướng dẫn."""
+
     app_id, number, total, device = STEP_INFO[key]
-    return _step_nav(
+
+    navigation = _step_nav(
         ("Chọn app khác", device),
         f"step_{app_id}_{number - 1}",
         f"step_{app_id}_{number + 1}",
         number,
         total,
     )
+
+    # Riêng Hiddify: thêm nút tải App Store
+    if app_id == "ios_hiddify":
+
+        rows = [
+            [
+                button(
+                    "app",
+                    "Tải Hiddify trên App Store",
+                    url=APP_GUIDES[app_id]["download_url"],
+                )
+            ]
+        ]
+
+        rows.extend(
+            [list(row) for row in navigation.inline_keyboard]
+        )
+
+        return InlineKeyboardMarkup(rows)
+
+    return navigation
 
 
 def sni_keyboard():
