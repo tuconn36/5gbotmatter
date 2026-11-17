@@ -211,7 +211,7 @@ APP_GUIDES = {
         "download_url": "https://apps.apple.com/vn/app/happ-proxy-utility/id6504287215",
         "steps": [
             ("Tải ứng dụng", "Tải <b>Happ</b> trên App Store rồi mở app."),
-            ("Copy", "Bấm <b>Nhập đăng kí</b> → Bấm sao chép),
+            ("Copy", "Bấm <b>Nhập đăng kí</b> → Bấm sao chép"),
             ("Nhập cấu hình", Bấm Clipboard),
             ("Kết nối", "Bấm nút kết nối → bấm <b>Cho phép</b> khi iPhone hỏi thêm VPN."),
         ],
